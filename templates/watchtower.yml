@@ -1,0 +1,21 @@
+# Watchtower (automatic docker container updater) - https://github.com/containrrr/watchtower
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    network_mode: bridge
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=022
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_INCLUDE_STOPPED=false
+      - WATCHTOWER_MONITOR_ONLY=false
+      - WATCHTOWER_SCHEDULE=0 0 4 * * *
+      - WATCHTOWER_TIMEOUT=10s
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock

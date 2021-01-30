@@ -1,0 +1,21 @@
+# Tautulli - https://hotio.dev/containers/tautulli/
+# <mkdir /volume1/docker/appdata/tautulli>
+  tautulli:
+    container_name: tautulli
+    image: ghcr.io/hotio/tautulli
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    network_mode: bridge
+    ports:
+      - 8181:8181
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=002
+      - ARGS=
+      - DEBUG=no
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERCONFDIR}/tautulli:/config:rw

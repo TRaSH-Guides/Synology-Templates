@@ -1,0 +1,22 @@
+# Emby - https://docs.linuxserver.io/images/docker-emby
+# <mkdir /volume1/docker/appdata/emby>
+  emby:
+    container_name: emby
+    image: ghcr.io/linuxserver/emby
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    network_mode: bridge
+    ports:
+      - 8096:8096/tcp
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK_SET=022
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERCONFDIR}/emby:/config:rw
+      - ${DOCKERSTORAGEDIR}/media:/data/media:rw

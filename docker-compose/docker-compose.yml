@@ -1,0 +1,134 @@
+version: "3.2"
+services:
+# Radarr - https://hotio.dev/containers/radarr/
+# <mkdir /volume1/docker/appdata/radarr>
+  radarr:
+    container_name: radarr
+    image: ghcr.io/hotio/radarr:latest
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    network_mode: bridge
+    ports:
+      - 7878:7878
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERCONFDIR}/radarr:/config
+      - ${DOCKERSTORAGEDIR}:/data
+
+# Sonarr - https://hotio.dev/containers/sonarr/
+# <mkdir /volume1/docker/appdata/sonarr>
+  sonarr:
+    container_name: sonarr
+    image: ghcr.io/hotio/sonarr:nightly
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    network_mode: bridge
+    ports:
+      - 8989:8989
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERCONFDIR}/sonarr:/config
+      - ${DOCKERSTORAGEDIR}:/data
+
+# Bazarr - https://hotio.dev/containers/bazarr/
+# <mkdir /volume1/docker/appdata/bazarr>
+  bazarr:
+    container_name: bazarr
+    image: ghcr.io/hotio/bazarr:nightly
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    network_mode: bridge
+    ports:
+      - 6767:6767
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERCONFDIR}/bazarr:/config
+      - ${DOCKERSTORAGEDIR}/media:/data/media
+
+# Watchtower (automatic docker container updater) - https://github.com/containrrr/watchtower
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    network_mode: bridge
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=022
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_INCLUDE_STOPPED=false
+      - WATCHTOWER_MONITOR_ONLY=false
+      - WATCHTOWER_SCHEDULE=0 0 4 * * *
+      - WATCHTOWER_TIMEOUT=10s
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+
+# Plex - https://hotio.dev/containers/plex/
+# <mkdir /volume1/docker/appdata/plex>
+  plex:
+    container_name: plex
+    image: ghcr.io/hotio/plex
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    network_mode: bridge
+    ports:
+      - 32400:32400
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=002
+      - ARGS=
+      - DEBUG=no
+      - PLEX_CLAIM=${PLEX_CLAIM}
+      - ADVERTISE_IP=
+      - ALLOWED_NETWORKS=
+      - PLEX_PASS=${PLEX_PASS}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERCONFDIR}/plex:/config:rw
+      - ${DOCKERSTORAGEDIR}/media:/data/media:rw
+      - /tmp:/transcode:rw
+      - /dev/dri:/dev/dri
+
+# Tautulli - https://hotio.dev/containers/tautulli/
+# <mkdir /volume1/docker/appdata/tautulli>
+  tautulli:
+    container_name: tautulli
+    image: ghcr.io/hotio/tautulli
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    network_mode: bridge
+    ports:
+      - 8181:8181
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=002
+      - ARGS=
+      - DEBUG=no
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERCONFDIR}/tautulli:/config:rw

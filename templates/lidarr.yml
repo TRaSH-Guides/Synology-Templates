@@ -1,0 +1,19 @@
+# Lidarr - https://hotio.dev/containers/lidarr/
+# <mkdir /volume1/docker/appdata/lidarr>
+  lidarr:
+    container_name: lidarr
+    image: ghcr.io/hotio/lidarr:latest
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    network_mode: bridge
+    ports:
+      - 8686:8686
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERCONFDIR}/lidarr:/config
+      - ${DOCKERSTORAGEDIR}:/data

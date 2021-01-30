@@ -1,0 +1,19 @@
+# Bazarr - https://hotio.dev/containers/bazarr/
+# <mkdir /volume1/docker/appdata/bazarr>
+  bazarr:
+    container_name: bazarr
+    image: ghcr.io/hotio/bazarr:nightly
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    network_mode: bridge
+    ports:
+      - 6767:6767
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERCONFDIR}/bazarr:/config
+      - ${DOCKERSTORAGEDIR}/media:/data/media

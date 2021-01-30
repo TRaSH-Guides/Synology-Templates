@@ -1,0 +1,19 @@
+# Sonarr - https://hotio.dev/containers/sonarr/
+# <mkdir /volume1/docker/appdata/sonarr>
+  sonarr:
+    container_name: sonarr
+    image: ghcr.io/hotio/sonarr:nightly
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    network_mode: bridge
+    ports:
+      - 8989:8989
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERCONFDIR}/sonarr:/config
+      - ${DOCKERSTORAGEDIR}:/data

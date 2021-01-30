@@ -1,0 +1,28 @@
+# Plex - https://hotio.dev/containers/plex/
+# <mkdir /volume1/docker/appdata/plex>
+  plex:
+    container_name: plex
+    image: ghcr.io/hotio/plex
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    network_mode: bridge
+    ports:
+      - 32400:32400
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=002
+      - ARGS=
+      - DEBUG=no
+      - PLEX_CLAIM=${PLEX_CLAIM}
+      - ADVERTISE_IP=
+      - ALLOWED_NETWORKS=
+      - PLEX_PASS=${PLEX_PASS}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERCONFDIR}/plex:/config:rw
+      - ${DOCKERSTORAGEDIR}/media:/data/media:rw
+      - /tmp:/transcode:rw
+      - /dev/dri:/dev/dri

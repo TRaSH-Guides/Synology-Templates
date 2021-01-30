@@ -1,0 +1,20 @@
+# SABnzbd - https://hotio.dev/containers/sabnzbd/
+# <mkdir /volume1/docker/appdata/sabnzbd>
+  sabnzbd:
+    container_name: sabnzbd
+    image: ghcr.io/hotio/sabnzbd:latest
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    network_mode: bridge
+    ports:
+      - 8080:8080
+      - 9090:9090
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERCONFDIR}/sabnzbd:/config
+      - ${DOCKERSTORAGEDIR}/usenet:/data/usenet:rw

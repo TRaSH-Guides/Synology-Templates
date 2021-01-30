@@ -1,0 +1,25 @@
+# Deluge - https://docs.linuxserver.io/images/docker-deluge
+# <mkdir /volume1/docker/appdata/deluge>
+  deluge:
+    container_name: deluge
+    image: ghcr.io/linuxserver/deluge
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    network_mode: bridge
+    ports:
+      - 51413:51413
+      - 51413:51413/udp
+      - 58846:58846
+      - 58946:58946
+      - 6881:6881
+      - 6881:6881/udp
+      - 8112:8112
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERCONFDIR}/deluge:/config
+      - ${DOCKERSTORAGEDIR}/torrents:/data/torrents

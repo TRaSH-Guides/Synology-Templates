@@ -1,0 +1,20 @@
+# Jackett - https://hotio.dev/containers/jackett/
+# <mkdir /volume1/docker/appdata/jackett>
+  jackett:
+    container_name: jackett
+    image: ghcr.io/hotio/jackett
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    network_mode: bridge
+    ports:
+      - 9117:9117
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=002
+      - ARGS=
+      - DEBUG=no
+    volumes:
+      - ${DOCKERCONFDIR}/jackett:/config:rw

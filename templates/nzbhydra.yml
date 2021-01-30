@@ -1,0 +1,21 @@
+# NZBHydra2 - https://hotio.dev/containers/nzbhydra2/
+# <mkdir /volume1/docker/appdata/nzbhydra2>
+  nzbhydra2:
+    container_name: nzbhydra2
+    image: ghcr.io/hotio/nzbhydra2:latest
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    network_mode: bridge
+    ports:
+      - 5076:5076/tcp
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=022
+      - ARGS=
+      - DEBUG=no
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERCONFDIR}/nzbhydra2:/config:rw
