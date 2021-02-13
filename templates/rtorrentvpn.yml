@@ -10,9 +10,9 @@
       driver: json-file
     network_mode: bridge
     ports:
-      - 8080:8080/tcp
+      - ${RTORRENTVPN_PORT_9080}:9080
       - 9443:9443/tcp
-      - 8118:8118/tcp
+      - ${RTORRENTVPN_PORT_8118}:8118
     privileged: true
     cap_add:
       - NET_ADMIN
@@ -30,7 +30,7 @@
       - STRICT_PORT_FORWARD=yes
       - LAN_NETWORK=${LAN_NETWORK}
       - NAME_SERVERS=209.222.18.222,84.200.69.80,37.235.1.174,1.1.1.1,209.222.18.218,37.235.1.177,84.200.70.40,1.0.0.1
-      - WEBUI_PORT=9080
+      - WEBUI_PORT=${RTORRENTVPN_PORT_9080}
       - ENABLE_PRIVOXY=${RTORRENTVPN_ENABLE_PRIVOXY}
       - ENABLE_AUTODL_IRSSI=${RTORRENTVPN_ENABLE_AUTODL_IRSSI}
       - ENABLE_RPC2=${RTORRENTVPN_ENABLE_RPC2}
