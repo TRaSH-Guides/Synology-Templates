@@ -9,8 +9,8 @@
       driver: json-file
     network_mode: bridge
     ports:
-      - 8080:8080/tcp
-      - 8118:8118/tcp
+      - ${QBITTORRENTVPN_PORT_8080}:8080/tcp
+      - ${QBITTORRENTVPN_PORT_8118}:8118/tcp
     privileged: true
     cap_add:
       - NET_ADMIN
@@ -20,7 +20,7 @@
       - TZ=${TZ}
       - UMASK=022
       - DEBUG=false
-      - VPN_ENABLED=yes
+      - VPN_ENABLED=${VPN_ENABLE}
       - VPN_CLIENT=openvpn
       - VPN_USER=${VPN_USER}
       - VPN_PASS=${VPN_PASS}
@@ -28,7 +28,8 @@
       - STRICT_PORT_FORWARD=yes
       - LAN_NETWORK=${LAN_NETWORK}
       - NAME_SERVERS=209.222.18.222,84.200.69.80,37.235.1.174,1.1.1.1,209.222.18.218,37.235.1.177,84.200.70.40,1.0.0.1
-      - WEBUI_PORT=8080
+      - WEBUI_PORT=${QBITTORRENTVPN_PORT_8080}
+      - ENABLE_PRIVOXY=${QBITTORRENTVPN_ENABLE_PRIVOXY}
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERCONFDIR}/binhex-qbittorrentvpn:/config:rw

@@ -9,8 +9,8 @@
       driver: json-file
     network_mode: bridge
     ports:
-      - 8112:8112
-      - 8118:8118
+      - ${DELUGEVPN_PORT_8112}:8112
+      - ${DELUGEVPN_PORT_8118}:8118
       - 58846:58846
       - 58946:58946
     privileged: true
@@ -22,7 +22,7 @@
       - TZ=${TZ}
       - UMASK=022
       - DEBUG=false
-      - VPN_ENABLED=yes
+      - VPN_ENABLED=${VPN_ENABLE}
       - VPN_CLIENT=openvpn
       - VPN_USER=${VPN_USER}
       - VPN_PASS=${VPN_PASS}
@@ -30,6 +30,7 @@
       - STRICT_PORT_FORWARD=yes
       - LAN_NETWORK=${LAN_NETWORK}
       - NAME_SERVERS=209.222.18.222,84.200.69.80,37.235.1.174,1.1.1.1,209.222.18.218,37.235.1.177,84.200.70.40,1.0.0.1
+      - ENABLE_PRIVOXY=${DELUGEVPN_ENABLE_PRIVOXY}
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERCONFDIR}/delugevpn:/config:rw
