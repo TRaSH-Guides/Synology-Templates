@@ -1,0 +1,46 @@
+# rtorrentvpn - https://github.com/binhex/arch-rtorrentvpn
+# <mkdir /volume1/docker/appdata/rtorrentvpn>
+# start the container, and in your appdata folder a openvpn folder will be created where you need to place your .ovpn file you got from your VPN provider !!!
+# remember to change in the .env the passwords RPC2_PASS and WEBUI_PASS, default is rutorrent !!!
+  rtorrentvpn:
+    container_name: rtorrentvpn
+    image: binhex/arch-rtorrentvpn:latest
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    network_mode: bridge
+    ports:
+      - ${RTORRENTVPN_PORT_9080}:9080
+      - 9443:9443/tcp
+      - ${RTORRENTVPN_PORT_8118}:8118
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=022
+      - DEBUG=false
+      - VPN_ENABLED=${VPN_ENABLE}
+      - VPN_CLIENT=openvpn
+      - VPN_USER=${VPN_USER}
+      - VPN_PASS=${VPN_PASS}
+      - VPN_PROV=${VPN_PROV}
+      - STRICT_PORT_FORWARD=yes
+      - LAN_NETWORK=${LAN_NETWORK}
+      - NAME_SERVERS=209.222.18.222,84.200.69.80,37.235.1.174,1.1.1.1,209.222.18.218,37.235.1.177,84.200.70.40,1.0.0.1
+      - WEBUI_PORT=${RTORRENTVPN_PORT_9080}
+      - ENABLE_PRIVOXY=${RTORRENTVPN_ENABLE_PRIVOXY}
+      - ENABLE_AUTODL_IRSSI=${RTORRENTVPN_ENABLE_AUTODL_IRSSI}
+      - ENABLE_RPC2=${RTORRENTVPN_ENABLE_RPC2}
+      - ENABLE_RPC2_AUTH=${RTORRENTVPN_ENABLE_RPC2_AUTH}
+      - RPC2_PASS=${RTORRENTVPN_RPC2_PASS}
+      - RPC2_USER=${RTORRENTVPN_RPC2_USER}
+      - ENABLE_WEBUI_AUTH=${RTORRENTVPN_ENABLE_WEBUI_AUTH}
+      - WEBUI_PASS=${RTORRENTVPN_WEBUI_PASS}
+      - WEBUI_USER=${RTORRENTVPN_WEBUI_USER}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERCONFDIR}/binhex-rtorrentvpn:rw
+      - ${DOCKERSTORAGEDIR}/torrents:/data/torrents:rw
