@@ -1,0 +1,19 @@
+# Bazarr - https://hotio.dev/containers/overseerr/
+# <mkdir /volume1/docker/appdata/overseerr>
+  overseerr:
+    container_name: overseerr
+    image: ghcr.io/hotio/overseerr
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    network_mode: bridge
+    ports:
+      - 5055:5055
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERCONFDIR}/overseerr:/config
+      - ${DOCKERSTORAGEDIR}/media:/data/media
