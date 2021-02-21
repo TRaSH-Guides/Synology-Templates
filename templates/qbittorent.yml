@@ -15,7 +15,7 @@
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - UMASK_SET=022
+      - UMASK=022
       - WEBUI_PORT=8080
     volumes:
       - /etc/localtime:/etc/localtime:ro
