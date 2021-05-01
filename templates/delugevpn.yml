@@ -1,4 +1,4 @@
-# qBittorrentvpn - https://github.com/binhex/arch-delugevpn
+# delugevpn - https://github.com/binhex/arch-delugevpn
 # <mkdir /volume1/docker/appdata/delugevpn>
 # start the container, and in your appdata a openvpn folder will be created where you need to place your .ovpn file you got from your VPN provider !!!
   delugevpn:
