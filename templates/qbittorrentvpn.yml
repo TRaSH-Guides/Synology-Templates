@@ -1,6 +1,9 @@
 # qBittorrentvpn - https://github.com/binhex/arch-qbittorrentvpn
 # <mkdir /volume1/docker/appdata/qbittorrentvpn>
 # start the container, and in your appdata a openvpn folder will be created where you need to place your .ovpn file you got from your VPN provider !!!
+# if the qBittorrent GUI isn't visible run "sudo insmod /lib/modules/tun.ko" and if that doesn't fix it also run "sudo insmod /lib/modules/iptable_mangle.ko"
+# to make it survive boot => 'Task Scheduler', Select user 'root', event 'Boot-up' and check 'Enabled'. As script enter: "insmod /lib/modules/tun.ko"
+# and if needed "insmod /lib/modules/iptable_mangle.ko"
   qbittorrentvpn:
     container_name: qbittorrentvpn
     image: binhex/arch-qbittorrentvpn:latest
