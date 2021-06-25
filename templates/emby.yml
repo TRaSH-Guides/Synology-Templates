@@ -1,5 +1,7 @@
 # Emby - https://docs.linuxserver.io/images/docker-emby
 # <mkdir /volume1/docker/appdata/emby>
+# if you have a Syno with an Intel CPU and want hardware transcoding run "sudo chmod 666 /dev/dri/renderD128"
+# to make it survive boot => 'Task Scheduler', Select user 'root', event 'Boot-up' and check 'Enabled'. As script enter: "chmod 666 /dev/dri/renderD128"
   emby:
     container_name: emby
     image: ghcr.io/linuxserver/emby
@@ -20,3 +22,7 @@
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERCONFDIR}/emby:/config:rw
       - ${DOCKERSTORAGEDIR}/media:/data/media:rw
+    devices:                                        # optional: if you have a Syno with an Intel CPU and want hardware transcoding
+      - /dev/dri/card0:/dev/dri/card0               # optional: if you have a Syno with an Intel CPU and want hardware transcoding
+      - /dev/dri/renderD128:/dev/dri/renderD128     # optional: if you have a Syno with an Intel CPU and want hardware transcoding
+    privileged: true                                # optional: if you have a Syno with an Intel CPU and want hardware transcoding
