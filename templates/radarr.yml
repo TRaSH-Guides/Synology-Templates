@@ -6,7 +6,6 @@
     restart: unless-stopped
     logging:
       driver: json-file
-    network_mode: bridge
     ports:
       - 7878:7878
     environment:

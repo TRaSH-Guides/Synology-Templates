@@ -10,7 +10,6 @@
     restart: unless-stopped
     logging:
       driver: json-file
-    network_mode: bridge
     ports:
       - ${QBITTORRENTVPN_PORT_8080}:8080/tcp
       - ${QBITTORRENTVPN_PORT_8118}:8118/tcp

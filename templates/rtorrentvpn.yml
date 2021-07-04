@@ -8,7 +8,6 @@
     restart: unless-stopped
     logging:
       driver: json-file
-    network_mode: bridge
     ports:
       - ${RTORRENTVPN_PORT_9080}:9080
       - 9443:9443/tcp

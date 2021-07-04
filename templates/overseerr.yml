@@ -6,7 +6,6 @@
     restart: unless-stopped
     logging:
       driver: json-file
-    network_mode: bridge
     ports:
       - 5055:5055
     environment:

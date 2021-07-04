@@ -5,7 +5,6 @@
     restart: unless-stopped
     logging:
       driver: json-file
-    network_mode: bridge
     environment:
       - PUID=${PUID}
       - PGID=${PGID}

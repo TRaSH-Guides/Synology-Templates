@@ -8,7 +8,6 @@
     restart: unless-stopped
     logging:
       driver: json-file
-    network_mode: bridge
     ports:
       - 8096:8096/tcp
     environment:

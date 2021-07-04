@@ -7,7 +7,6 @@
     restart: unless-stopped
     logging:
       driver: json-file
-    network_mode: bridge
     ports:
       - ${DELUGEVPN_PORT_8112}:8112
       - ${DELUGEVPN_PORT_8118}:8118
