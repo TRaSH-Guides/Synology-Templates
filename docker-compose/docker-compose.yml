@@ -8,7 +8,6 @@ services:
     restart: unless-stopped
     logging:
       driver: json-file
-    network_mode: bridge
     ports:
       - 7878:7878
     environment:
@@ -28,7 +27,6 @@ services:
     restart: unless-stopped
     logging:
       driver: json-file
-    network_mode: bridge
     ports:
       - 8989:8989
     environment:
@@ -48,7 +46,6 @@ services:
     restart: unless-stopped
     logging:
       driver: json-file
-    network_mode: bridge
     ports:
       - 6767:6767
     environment:
@@ -67,7 +64,6 @@ services:
     restart: unless-stopped
     logging:
       driver: json-file
-    network_mode: bridge
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -90,7 +86,6 @@ services:
     restart: unless-stopped
     logging:
       driver: json-file
-    network_mode: bridge
     ports:
       - 32400:32400
     environment:
@@ -119,7 +114,6 @@ services:
     restart: unless-stopped
     logging:
       driver: json-file
-    network_mode: bridge
     ports:
       - 8181:8181
     environment:
