@@ -1,6 +1,9 @@
 # delugevpn - https://github.com/binhex/arch-delugevpn
 # <mkdir /volume1/docker/appdata/delugevpn>
 # start the container, and in your appdata a openvpn folder will be created where you need to place your .ovpn file you got from your VPN provider !!!
+# if the torrent vpn client GUI isn't visible run "sudo insmod /lib/modules/tun.ko" and if that doesn't fix it also run "sudo insmod /lib/modules/iptable_mangle.ko"
+# to make it survive boot => 'Task Scheduler', Select user 'root', event 'Boot-up' and check 'Enabled'. As script enter: "insmod /lib/modules/tun.ko"
+# and if needed "insmod /lib/modules/iptable_mangle.ko"
   delugevpn:
     container_name: delugevpn
     image: binhex/arch-delugevpn:latest

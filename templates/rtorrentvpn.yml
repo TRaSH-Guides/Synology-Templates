@@ -2,6 +2,9 @@
 # <mkdir /volume1/docker/appdata/rtorrentvpn>
 # start the container, and in your appdata folder a openvpn folder will be created where you need to place your .ovpn file you got from your VPN provider !!!
 # remember to change in the .env the passwords RPC2_PASS and WEBUI_PASS, default is rutorrent !!!
+# if the torrent vpn client GUI isn't visible run "sudo insmod /lib/modules/tun.ko" and if that doesn't fix it also run "sudo insmod /lib/modules/iptable_mangle.ko"
+# to make it survive boot => 'Task Scheduler', Select user 'root', event 'Boot-up' and check 'Enabled'. As script enter: "insmod /lib/modules/tun.ko"
+# and if needed "insmod /lib/modules/iptable_mangle.ko"
   rtorrentvpn:
     container_name: rtorrentvpn
     image: binhex/arch-rtorrentvpn:latest
