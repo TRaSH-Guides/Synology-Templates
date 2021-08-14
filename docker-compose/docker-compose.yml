@@ -94,7 +94,6 @@ services:
       - TZ=${TZ}
       - UMASK=002
       - ARGS=
-      - DEBUG=no
       - PLEX_CLAIM=${PLEX_CLAIM}
       - ADVERTISE_IP=
       - ALLOWED_NETWORKS=
@@ -104,7 +103,8 @@ services:
       - ${DOCKERCONFDIR}/plex:/config:rw
       - ${DOCKERSTORAGEDIR}/media:/data/media:rw
       - /tmp:/transcode:rw
-      - /dev/dri:/dev/dri
+    devices:                                        # optional: if you have a Syno with an Intel CPU and want hardware transcoding
+      - /dev/dri:/dev/dri                           # optional: if you have a Syno with an Intel CPU and want hardware transcoding
 
 # Tautulli - https://hotio.dev/containers/tautulli/
 # <mkdir /volume1/docker/appdata/tautulli>
@@ -122,7 +122,6 @@ services:
       - TZ=${TZ}
       - UMASK=002
       - ARGS=
-      - DEBUG=no
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERCONFDIR}/tautulli:/config:rw
