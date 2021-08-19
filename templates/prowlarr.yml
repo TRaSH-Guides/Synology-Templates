@@ -1,0 +1,18 @@
+# Prowlarr - https://hotio.dev/containers/prowlarr/
+# <mkdir /volume1/docker/appdata/prowlarr>
+  prowlarr:
+    container_name: prowlarr
+    image: ghcr.io/hotio/prowlarr:testing
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    ports:
+      - 9696:9696
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=002
+      - ARGS=
+    volumes:
+      - ${DOCKERCONFDIR}/prowlarr:/config:rw
