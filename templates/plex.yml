@@ -23,5 +23,5 @@
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERCONFDIR}/plex:/config:rw
       - ${DOCKERSTORAGEDIR}/media:/data/media:rw
-      - /tmp:/transcode:rw
+      - /tmp/plex:/transcode:rw
       - /dev/dri:/dev/dri

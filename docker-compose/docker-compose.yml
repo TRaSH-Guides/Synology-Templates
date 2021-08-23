@@ -102,7 +102,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERCONFDIR}/plex:/config:rw
       - ${DOCKERSTORAGEDIR}/media:/data/media:rw
-      - /tmp:/transcode:rw
+      - /tmp/plex:/transcode:rw
     devices:                                        # optional: if you have a Syno with an Intel CPU and want hardware transcoding
       - /dev/dri:/dev/dri                           # optional: if you have a Syno with an Intel CPU and want hardware transcoding
 
