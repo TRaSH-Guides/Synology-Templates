@@ -80,6 +80,8 @@ services:
 
 # Plex - https://hotio.dev/containers/plex/
 # <mkdir /volume1/docker/appdata/plex>
+# <sudo mkdir /tmp/plex>
+# Also please read the extra info => https://trash-guides.info/Hardlinks/How-to-setup-for/Synology/#appdata
   plex:
     container_name: plex
     image: ghcr.io/hotio/plex
