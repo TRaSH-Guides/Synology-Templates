@@ -1,7 +1,5 @@
 # Plex - https://hotio.dev/containers/plex/
 # <mkdir /volume1/docker/appdata/plex>
-# <sudo mkdir /tmp/plex>
-# Also please read the extra info => https://trash-guides.info/Hardlinks/How-to-setup-for/Synology/#appdata
   plex:
     container_name: plex
     image: ghcr.io/hotio/plex
@@ -25,12 +23,11 @@
       - ARGS=
       - DEBUG=no
       - PLEX_CLAIM=${PLEX_CLAIM}
-      - ADVERTISE_IP=
+      - ADVERTISE_IP=${PLEX_ADVERTISE_IP}
       - ALLOWED_NETWORKS=
       - PLEX_PASS=${PLEX_PASS}
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERCONFDIR}/plex:/config:rw
       - ${DOCKERSTORAGEDIR}/media:/data/media:rw
-      - /tmp/plex:/transcode:rw
       - /dev/dri:/dev/dri
