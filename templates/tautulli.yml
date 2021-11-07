@@ -2,7 +2,7 @@
 # <mkdir /volume1/docker/appdata/tautulli>
   tautulli:
     container_name: tautulli
-    image: ghcr.io/hotio/tautulli
+    image: hotio/tautulli
     restart: unless-stopped
     logging:
       driver: json-file

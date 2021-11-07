@@ -2,7 +2,7 @@
 # <mkdir /volume1/docker/appdata/sabnzbd>
   sabnzbd:
     container_name: sabnzbd
-    image: ghcr.io/hotio/sabnzbd:latest
+    image: hotio/sabnzbd:latest
     restart: unless-stopped
     logging:
       driver: json-file

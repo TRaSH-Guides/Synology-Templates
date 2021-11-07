@@ -2,7 +2,7 @@
 # <mkdir /volume1/docker/appdata/prowlarr>
   prowlarr:
     container_name: prowlarr
-    image: ghcr.io/hotio/prowlarr:testing
+    image: hotio/prowlarr:testing
     restart: unless-stopped
     logging:
       driver: json-file

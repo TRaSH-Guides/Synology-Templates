@@ -2,7 +2,7 @@
 # <mkdir /volume1/docker/appdata/plex>
   plex:
     container_name: plex
-    image: ghcr.io/hotio/plex
+    image: hotio/plex
     restart: unless-stopped
     logging:
       driver: json-file

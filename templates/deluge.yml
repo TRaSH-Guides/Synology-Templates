@@ -2,7 +2,7 @@
 # <mkdir /volume1/docker/appdata/deluge>
   deluge:
     container_name: deluge
-    image: ghcr.io/linuxserver/deluge
+    image: lscr.io/linuxserver/deluge
     restart: unless-stopped
     logging:
       driver: json-file
