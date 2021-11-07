@@ -2,7 +2,7 @@
 # <mkdir /volume1/docker/appdata/nzbget>
   nzbget:
     container_name: nzbget
-    image: ghcr.io/hotio/nzbget:latest
+    image: hotio/nzbget:latest
     restart: unless-stopped
     logging:
       driver: json-file

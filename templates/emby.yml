@@ -2,7 +2,7 @@
 # <mkdir /volume1/docker/appdata/emby>
   emby:
     container_name: emby
-    image: ghcr.io/linuxserver/emby
+    image: lscr.io/linuxserver/emby
     restart: unless-stopped
     logging:
       driver: json-file

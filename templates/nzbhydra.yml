@@ -2,7 +2,7 @@
 # <mkdir /volume1/docker/appdata/nzbhydra2>
   nzbhydra2:
     container_name: nzbhydra2
-    image: ghcr.io/hotio/nzbhydra2:latest
+    image: hotio/nzbhydra2:latest
     restart: unless-stopped
     logging:
       driver: json-file
