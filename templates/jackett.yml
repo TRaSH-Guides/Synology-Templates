@@ -2,7 +2,7 @@
 # <mkdir /volume1/docker/appdata/jackett>
   jackett:
     container_name: jackett
-    image: hotio/jackett
+    image: cr.hotio.dev/hotio/jackett
     restart: unless-stopped
     logging:
       driver: json-file
