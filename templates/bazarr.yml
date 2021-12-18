@@ -2,7 +2,7 @@
 # <mkdir /volume1/docker/appdata/bazarr>
   bazarr:
     container_name: bazarr
-    image: hotio/bazarr:nightly
+    image: cr.hotio.dev/hotio/bazarr:nightly
     restart: unless-stopped
     logging:
       driver: json-file
