@@ -2,7 +2,7 @@
 # <mkdir /volume1/docker/appdata/radarr>
   radarr:
     container_name: radarr
-    image: hotio/radarr:latest
+    image: cr.hotio.dev/hotio/radarr:latest
     restart: unless-stopped
     logging:
       driver: json-file
