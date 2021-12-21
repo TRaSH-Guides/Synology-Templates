@@ -41,6 +41,6 @@
       - ENABLE_PRIVOXY=${QBITTORRENTVPN_ENABLE_PRIVOXY}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${DOCKERCONFDIR}/binhex-qbittorrentvpn:/config:rw
+      - ${DOCKERCONFDIR}/qbittorrentvpn:/config:rw
       - ${DOCKERSTORAGEDIR}/torrents:/data/torrents:rw
 
