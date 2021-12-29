@@ -1,0 +1,24 @@
+  # Notifiarr - https://hub.docker.com/r/golift/notifiarr
+  # <mkdir /volume1/docker/appdata/notifiarr>
+  notifiarr:
+    container_name: notifiarr
+    image: golift/notifiarr:latest
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-file: ${DOCKERLOGGING_MAXFILE}
+        max-size: ${DOCKERLOGGING_MAXSIZE}
+    ports:
+      - 5454:5454
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKERCONFDIR}/notifiarr:/config
+      - /var/run/utmp:/var/run/utmp
+    labels:
+      - org.hotio.pullio.update=${PULLIO_UPDATE}
+      - org.hotio.pullio.notify=${PULLIO_NOTIFY}
+      - org.hotio.pullio.discord.webhook=${PULLIO_DISCORD_WEBHOOK}
