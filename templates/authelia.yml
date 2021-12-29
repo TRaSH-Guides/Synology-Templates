@@ -1,0 +1,21 @@
+# Authelia - https://www.authelia.com/docs/
+# <sudo mkdir /volume1/docker/appdata/authelia>
+  authelia:
+    image: authelia/authelia
+    container_name: authelia
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-file: ${DOCKERLOGGING_MAXFILE}
+        max-size: ${DOCKERLOGGING_MAXSIZE}
+    volumes:
+      - ${DOCKERCONFDIR}/authelia:/config
+    environment:
+      - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+    labels:
+      - org.hotio.pullio.update=${PULLIO_UPDATE}
+      - org.hotio.pullio.notify=${PULLIO_NOTIFY}
+      - org.hotio.pullio.discord.webhook=${PULLIO_DISCORD_WEBHOOK}
