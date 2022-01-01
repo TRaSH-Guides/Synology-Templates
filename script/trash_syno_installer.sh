@@ -106,6 +106,7 @@ ip="$(ip route get 1 | awk '{print $NF;exit}')"                                 
 gateway="$(ip route | grep "$(ip route get 1 | awk '{print $7}')" | awk 'FNR==2{print $1}')"   # get gateway ip
 TZ="$(realpath --relative-to /usr/share/zoneinfo /etc/localtime)"                              # get timezone
 synoinfo_default_path="$(sed -rn 's|(.*)(pkg_def_intall_vol="(.*)")|\2|p' /etc/synoinfo.conf)" # set the default path for app installations.
+qsv="/dev/dri/"
 
 # get the lastest docker version by scraping the archive.synology.com page for the package.
 docker_version=$(curl -sL "https://archive.synology.com/download/Package/Docker" | sed -rn 's|(.*)href="/download/Package/Docker/(.*)" (.*)|\2|p' | head -n 1) # get the lastest docker version
@@ -195,6 +196,17 @@ if wget -qO "$docker_conf_dir/appdata/.env" https://raw.githubusercontent.com/TR
 else
     printf '\n%s\n' "There was a problem downloading then .env, try again"
     exit 1
+fi
+
+#check for quick sync
+if [[ -d "$qsv" ]]; then
+    ### Do nothing if $qsv exists.
+    printf '\n%s\n' "Intel Quick Sync found for Plex Hardware Transcoding."
+else
+    ### Take action if $qsv does not exist.
+    sed -i "s|    devices:|#    devices:|g" "$docker_conf_dir/appdata/docker-compose.yml"
+    sed -i "s|      - /dev/dri:/dev/dri|#      - /dev/dri:/dev/dri|g" "$docker_conf_dir/appdata/docker-compose.yml"
+    printf '\n%s\n' "No Intel Quick Sync found for Plex Hardware Transcoding."
 fi
 
 printf '\n%s\n\n' "Setting correct User ID in .env ..."
