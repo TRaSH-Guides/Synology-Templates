@@ -13,8 +13,6 @@
     ports:
       - 5454:5454
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
       - TZ=${TZ}
     volumes:
       - ${DOCKERCONFDIR}/notifiarr:/config
