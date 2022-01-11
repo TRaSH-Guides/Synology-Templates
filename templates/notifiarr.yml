@@ -4,6 +4,7 @@
     container_name: notifiarr
     image: golift/notifiarr:latest
     restart: unless-stopped
+    hostname: notifiarr
     logging:
       driver: json-file
       options:
