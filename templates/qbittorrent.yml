@@ -1,5 +1,8 @@
 # qBittorrent - https://docs.linuxserver.io/images/docker-qbittorrent
 # <mkdir /volume1/docker/appdata/qbittorent>
+# Due to issues with CSRF and port mapping, should you require to alter the port for the webui
+# you need to change both sides of the port 8080 switch AND set the WEBUI_PORT variable to the new port.
+# For example, to set the port to 8090 you need to change port 8080:8080 to 8090:8090 and WEBUI_PORT=8090
   qbittorrent:
     container_name: qbittorrent
     image: lscr.io/linuxserver/qbittorrent
