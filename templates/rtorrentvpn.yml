@@ -51,5 +51,5 @@
       - WEBUI_USER=${RTORRENTVPN_WEBUI_USER}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${DOCKERCONFDIR}/rtorrentvpn:rw
-      - ${DOCKERSTORAGEDIR}/torrents:/data/torrents:rw
+      - ${DOCKERCONFDIR}/rtorrentvpn:/config
+      - ${DOCKERSTORAGEDIR}/torrents:/data/torrents
