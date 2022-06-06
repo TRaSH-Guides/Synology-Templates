@@ -1,0 +1,19 @@
+# recyclarr - https://github.com/recyclarr/recyclarr
+# <mkdir /volume1/docker/appdata/recyclarr>
+  recyclarr:
+    container_name: recyclarr
+    image: ghcr.io/recyclarr/recyclarr
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-file: ${DOCKERLOGGING_MAXFILE}
+        max-size: ${DOCKERLOGGING_MAXSIZE}
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - CRON_SCHEDULE=@daily
+    init: true
+    volumes:
+      - ${DOCKERCONFDIR}/recyclarr:/config
