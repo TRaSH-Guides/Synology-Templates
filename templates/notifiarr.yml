@@ -1,7 +1,9 @@
-  # Notifiarr - https://hub.docker.com/r/golift/notifiarr
-  # <mkdir /volume1/docker/appdata/notifiarr>
+  # notifiarr - https://hub.docker.com/r/golift/notifiarr/
+# <mkdir /volume1/docker/appdata/notifiarr>
+# It is important that a static hostname is set so the site can keep track of multiple clients for the settings
   notifiarr:
     container_name: notifiarr
+    hostname: ${HOSTNAME}
     image: golift/notifiarr:latest
     restart: unless-stopped
     logging:
@@ -12,12 +14,11 @@
     ports:
       - 5454:5454
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
       - TZ=${TZ}
     volumes:
       - ${DOCKERCONFDIR}/notifiarr:/config
-      - /var/run/utmp:/var/run/utmp
+      - /var/run/utmp:/var/run/utmp          # optional, only needed if you want to count users
+    privileged: true                         # Optional, only needed for Snapshots
     labels:
       - org.hotio.pullio.update=${PULLIO_UPDATE}
       - org.hotio.pullio.notify=${PULLIO_NOTIFY}
