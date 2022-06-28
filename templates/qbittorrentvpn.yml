@@ -1,12 +1,9 @@
-# qBittorrentvpn - https://github.com/binhex/arch-qbittorrentvpn
+# qBittorrentvpn - https://hub.docker.com/r/hotio/qbittorrent
 # <mkdir /volume1/docker/appdata/qbittorrentvpn>
-# start the container, and in your appdata a openvpn folder will be created where you need to place your .ovpn file you got from your VPN provider !!!
-# if the torrent vpn client GUI isn't visible run "sudo insmod /lib/modules/tun.ko" and if that doesn't fix it also run "sudo insmod /lib/modules/iptable_mangle.ko"
-# to make it survive boot => 'Task Scheduler', Select user 'root', event 'Boot-up' and check 'Enabled'. As script enter: "insmod /lib/modules/tun.ko"
-# and if needed "insmod /lib/modules/iptable_mangle.ko"
+# start the container, and in your appdata/qbittorrentvpn a wireguard folder will be created where you need to place your wg0.conf file you got from your VPN provider !!!
   qbittorrentvpn:
     container_name: qbittorrentvpn
-    image: binhex/arch-qbittorrentvpn:latest
+    image: cr.hotio.dev/hotio/qbittorrent:latest
     restart: unless-stopped
     logging:
       driver: json-file
@@ -18,27 +15,23 @@
       - org.hotio.pullio.notify=${PULLIO_NOTIFY}
       - org.hotio.pullio.discord.webhook=${PULLIO_DISCORD_WEBHOOK}
     ports:
-      - ${QBITTORRENTVPN_PORT_8080}:8080/tcp
-      - ${QBITTORRENTVPN_PORT_8118}:8118/tcp
-    privileged: true
+      - 8080:8080
+      - 8118:8118
     cap_add:
       - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
       - UMASK=022
-      - DEBUG=false
-      - VPN_ENABLED=${VPN_ENABLE}
-      - VPN_CLIENT=openvpn
-      - VPN_USER=${VPN_USER}
-      - VPN_PASS=${VPN_PASS}
-      - VPN_PROV=${VPN_PROV}
-      - STRICT_PORT_FORWARD=yes
-      - LAN_NETWORK=${LAN_NETWORK}
-      - NAME_SERVERS=209.222.18.222,84.200.69.80,37.235.1.174,1.1.1.1,209.222.18.218,37.235.1.177,84.200.70.40,1.0.0.1
-      - WEBUI_PORT=${QBITTORRENTVPN_PORT_8080}
-      - ENABLE_PRIVOXY=${QBITTORRENTVPN_ENABLE_PRIVOXY}
+      - VPN_ENABLED=true
+      - VPN_LAN_NETWORK=${LAN_NETWORK}
+      - VPN_CONF=wg0
+      - PRIVOXY_ENABLED=false
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERCONFDIR}/qbittorrentvpn:/config:rw
