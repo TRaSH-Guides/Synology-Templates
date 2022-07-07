@@ -1,9 +1,11 @@
-# qBittorrentvpn - https://hub.docker.com/r/hotio/qbittorrent
-# <mkdir /volume1/docker/appdata/qbittorrentvpn>
-# start the container, and in your appdata/qbittorrentvpn a wireguard folder will be created where you need to place your wg0.conf file you got from your VPN provider!!!
-# After generating wg0.conf, edit the file, and change the AllowedIPs to this AllowedIPs = 0.0.0.0/1,128.0.0.1.
-  qbittorrentvpn:
-    container_name: qbittorrentvpn
+# qBittorrent - https://hub.docker.com/r/hotio/qbittorrent
+# <mkdir /volume1/docker/appdata/qbittorrent>
+# If you want to use VPN follow the instructions below.
+# Make the changes to the wg0.conf files as desctriped here https://hotio.dev/containers/qbittorrent/#wireguard-go.
+# If you use TorGuard do not add "PreUp = bash /config/wireguard/torguard.sh" to the wg0.conf, this will break the VPN connection.
+# Start the container, and in your appdata/qbittorrent a wireguard folder will be created where you need to place your wg0.conf file you got from your VPN provider !!!
+  qbittorrent:
+    container_name: qbittorrent
     image: cr.hotio.dev/hotio/qbittorrent:latest
     restart: unless-stopped
     logging:
@@ -16,8 +18,8 @@
       - org.hotio.pullio.notify=${PULLIO_NOTIFY}
       - org.hotio.pullio.discord.webhook=${PULLIO_DISCORD_WEBHOOK}
     ports:
-      - 8080:8080
-      - 8118:8118
+      - ${QBITTORRENT_WEBUI_PORT}:${QBITTORRENT_WEBUI_PORT}
+      - ${QBITTORRENT_PRIVOXY_PORT}:${QBITTORRENT_PRIVOXY_PORT}
     cap_add:
       - NET_ADMIN
     devices:
@@ -29,12 +31,12 @@
       - PGID=${PGID}
       - TZ=${TZ}
       - UMASK=022
-      - VPN_ENABLED=${VPN_ENABLE}
+      - VPN_ENABLED=${VPN_ENABLED}
       - VPN_LAN_NETWORK=${LAN_NETWORK}
       - VPN_CONF=wg0
-      - PRIVOXY_ENABLED=false
+      - PRIVOXY_ENABLED=${QBITTORRENT_ENABLE_PRIVOXY}
+      - WEBUI_PORTS=${QBITTORRENT_WEBUI_PORT}/tcp,${QBITTORRENT_WEBUI_PORT}/udp # Optional only needed if you want to change the default 8080 WebUI port
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${DOCKERCONFDIR}/qbittorrentvpn:/config:rw
+      - ${DOCKERCONFDIR}/qbittorrent:/config:rw
       - ${DOCKERSTORAGEDIR}/torrents:/data/torrents:rw
-
