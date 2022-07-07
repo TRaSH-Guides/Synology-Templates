@@ -29,7 +29,7 @@
       - PGID=${PGID}
       - TZ=${TZ}
       - UMASK=022
-      - VPN_ENABLED=${USE_VPN}
+      - VPN_ENABLED=${VPN_ENABLE}
       - VPN_LAN_NETWORK=${LAN_NETWORK}
       - VPN_CONF=wg0
       - PRIVOXY_ENABLED=false
