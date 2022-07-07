@@ -1,6 +1,7 @@
 # qBittorrentvpn - https://hub.docker.com/r/hotio/qbittorrent
 # <mkdir /volume1/docker/appdata/qbittorrentvpn>
-# start the container, and in your appdata/qbittorrentvpn a wireguard folder will be created where you need to place your wg0.conf file you got from your VPN provider !!!
+# start the container, and in your appdata/qbittorrentvpn a wireguard folder will be created where you need to place your wg0.conf file you got from your VPN provider!!!
+# After generating wg0.conf, edit the file, and change the AllowedIPs to this AllowedIPs = 0.0.0.0/1,128.0.0.1.
   qbittorrentvpn:
     container_name: qbittorrentvpn
     image: cr.hotio.dev/hotio/qbittorrent:latest
@@ -28,7 +29,7 @@
       - PGID=${PGID}
       - TZ=${TZ}
       - UMASK=022
-      - VPN_ENABLED=true
+      - VPN_ENABLED=${USE_VPN}
       - VPN_LAN_NETWORK=${LAN_NETWORK}
       - VPN_CONF=wg0
       - PRIVOXY_ENABLED=false
