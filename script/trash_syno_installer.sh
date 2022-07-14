@@ -417,7 +417,7 @@ systemctl -q restart synoscheduler
 printf '\n%s\n\n' "Task Created"
 
 printf '\n%s\n\n' "Now let's install the containers..."
-cd /"$docker_conf_dir/appdata/"
+cd "$docker_conf_dir/appdata/"
 docker-compose up -d
 printf '\n%s\n\n' "All set, everything should be running. If you have errors, follow the complete guide. And join our discord server."
 
