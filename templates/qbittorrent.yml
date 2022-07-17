@@ -1,6 +1,7 @@
 # qBittorrent - https://hub.docker.com/r/hotio/qbittorrent
 # <mkdir /volume1/docker/appdata/qbittorrent>
 # If you want to use VPN follow the instructions below.
+# To enable VPN set "VPN_ENABLED=true" in the .env, if you don't want VPN enabled set "VPN_ENABLED=false"
 # Make the changes to the wg0.conf files as desctriped here https://hotio.dev/containers/qbittorrent/#wireguard-go.
 # If you use TorGuard do not add "PreUp = bash /config/wireguard/torguard.sh" to the wg0.conf, this will break the VPN connection.
 # Start the container, and in your appdata/qbittorrent a wireguard folder will be created where you need to place your wg0.conf file you got from your VPN provider !!!
