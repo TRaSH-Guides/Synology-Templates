@@ -27,6 +27,7 @@
       - /dev/net/tun:/dev/net/tun
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
+      - net.ipv6.conf.all.disable_ipv6=1
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -35,6 +36,7 @@
       - VPN_ENABLED=${VPN_ENABLED}
       - VPN_LAN_NETWORK=${LAN_NETWORK}
       - VPN_CONF=wg0
+      - VPN_IP_CHECK_DELAY=10
       - PRIVOXY_ENABLED=${QBITTORRENT_ENABLE_PRIVOXY}
       - WEBUI_PORTS=${QBITTORRENT_WEBUI_PORT}/tcp,${QBITTORRENT_WEBUI_PORT}/udp # Optional only needed if you want to change the default 8080 WebUI port
     volumes:
