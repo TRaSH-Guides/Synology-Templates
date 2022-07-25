@@ -1,0 +1,34 @@
+name: create template-list.json
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "templates/**"
+  pull_request:
+    paths:
+      - "templates/**"
+jobs:
+  create-json:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Create templates/template-file-list.json
+        run: |
+          cd templates
+          template_file_list=()
+          for f in *.yml; do
+            template_file_list+=("${f/.yml/}")
+          done
+          jq -n --arg v "${template_file_list[*]}" '{"templates": $v | split(" ")}' > template-file-list.json
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Automated Change template-file-list.json
+          file_pattern: templates/template-file-list.json
+          commit_user_name: My GitHub Actions Bot # defaults to "github-actions[bot]"
+          commit_user_email: my-github-actions-bot@example.org # defaults to "github-actions[bot]@users.noreply.github.com"
+          commit_author: Author <actions@github.com> # defaults to author of the commit that triggered the run
