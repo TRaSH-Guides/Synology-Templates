@@ -27,7 +27,7 @@
       - /dev/net/tun:/dev/net/tun
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
-      - net.ipv6.conf.all.disable_ipv6=1  #Optional, if you want to use ipv6, remove this line. If you keep this line, make sure there is no ipv6 in your wg0.conf.
+      - net.ipv6.conf.all.disable_ipv6=1  # Optional, if you want to use ipv6, remove this line. If you keep this line, make sure there is no ipv6 in your wg0.conf.
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -38,7 +38,7 @@
       - VPN_CONF=wg0
       - VPN_IP_CHECK_DELAY=10
       - PRIVOXY_ENABLED=${QBITTORRENT_ENABLE_PRIVOXY}
-      - WEBUI_PORTS=${QBITTORRENT_WEBUI_PORT}/tcp,${QBITTORRENT_WEBUI_PORT}/udp # Optional only needed if you want to change the default 8080 WebUI port
+      - WEBUI_PORTS=${QBITTORRENT_WEBUI_PORT}/tcp,${QBITTORRENT_WEBUI_PORT}/udp  # Optional only needed if you want to change the default 8080 WebUI port
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERCONFDIR}/qbittorrent:/config:rw

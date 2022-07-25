@@ -1,4 +1,4 @@
-  # notifiarr - https://hub.docker.com/r/golift/notifiarr/
+# notifiarr - https://hub.docker.com/r/golift/notifiarr/
 # <mkdir /volume1/docker/appdata/notifiarr>
 # It is important that a static hostname is set so the site can keep track of multiple clients for the settings
   notifiarr:
