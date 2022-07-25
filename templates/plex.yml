@@ -32,5 +32,5 @@
       - ${DOCKERSTORAGEDIR}/media:/data/media:rw
     devices:                                        # optional: if you have a Syno with an Intel CPU with quicksync and want hardware transcoding (only with Plex Pass)
       - /dev/dri:/dev/dri                           # optional: if you have a Syno with an Intel CPU with quicksync and want hardware transcoding (only with Plex Pass)
-    #tmpfs:                                         # optional: if you have a Syno with enough RAM, you can uncomment this line to enable transcoding in RAM. 
-    #  - /transcode.                                # optional: if you have a Syno with enough RAM, you can uncomment this line to enable transcoding in RAM. 
+    # tmpfs:                                        # optional: if you have a Syno with enough RAM, you can uncomment this line to enable transcoding in RAM.
+    #  - /transcode.                                # optional: if you have a Syno with enough RAM, you can uncomment this line to enable transcoding in RAM.

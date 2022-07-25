@@ -26,5 +26,3 @@
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
       - ${DOCKERSTORAGEDIR}:/data
-
-
