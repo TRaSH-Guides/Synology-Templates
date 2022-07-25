@@ -3,6 +3,7 @@ name: Lint
 on: [push, pull_request]
 
 jobs:
+
   editorconfig-checker:
     runs-on: ubuntu-latest
     steps:
