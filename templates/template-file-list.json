@@ -1,0 +1,21 @@
+{
+  "templates": [
+    "authelia",
+    "bazarr",
+    "dozzle",
+    "emby",
+    "lidarr",
+    "notifiarr",
+    "nzbget",
+    "overseerr",
+    "plex",
+    "prowlarr",
+    "qbittorrent",
+    "radarr",
+    "recyclarr",
+    "sabnzbd",
+    "sonarr",
+    "tautulli",
+    "watchtower"
+  ]
+}
