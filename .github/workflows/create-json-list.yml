@@ -16,7 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          token: ${{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}}
+          token: ${{ API_KEY20220726 }}
 
       - name: Create templates/template-file-list.json
         run: |
