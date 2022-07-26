@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          token: ${{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}}
 
       - name: Create templates/template-file-list.json
         run: |
