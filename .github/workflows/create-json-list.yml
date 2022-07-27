@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.API_KEY20220726 }}
 
       - name: Create templates/template-file-list.json
         run: |
@@ -27,7 +29,6 @@ jobs:
 
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          token: ${{ API_KEY20220726 }}
           commit_message: Automated Change template-file-list.json
           file_pattern: templates/template-file-list.json
           commit_user_name: My GitHub Actions Bot # defaults to "github-actions[bot]"
