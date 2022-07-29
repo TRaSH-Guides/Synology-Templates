@@ -2,6 +2,7 @@
   "templates": [
     "authelia",
     "bazarr",
+    "cross-seed",
     "dozzle",
     "emby",
     "lidarr",
