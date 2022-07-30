@@ -1,0 +1,43 @@
+# qbit_manage - https://hub.docker.com/r/hotio/qbitmanage
+# <mkdir /volume1/docker/appdata/qbitmanage>
+  qbit_manage:
+    container_name: qbitmanage
+    image: cr.hotio.dev/hotio/qbitmanage:latest
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-file: ${DOCKERLOGGING_MAXFILE}
+        max-size: ${DOCKERLOGGING_MAXSIZE}
+    labels:
+      - org.hotio.pullio.update=${PULLIO_UPDATE}
+      - org.hotio.pullio.notify=${PULLIO_NOTIFY}
+      - org.hotio.pullio.discord.webhook=${PULLIO_DISCORD_WEBHOOK
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK=022
+      - TZ=${TZ}
+      - QBT_RUN=true
+      - QBT_SCHEDULE=1440
+      - QBT_STARTUP_DELAY=30
+      - QBT_CONFIG=config.yml
+      - QBT_LOGFILE=activity.log
+      - QBT_CROSS_SEED=false
+      - QBT_RECHECK=false
+      - QBT_CAT_UPDATE=false
+      - QBT_TAG_UPDATE=false
+      - QBT_REM_UNREGISTERED=false
+      - QBT_REM_ORPHANED=false
+      - QBT_TAG_NOHARDLINKS=false
+      - QBT_TAG_TRACKER_ERROR=false
+      - QBT_SKIP_RECYCLE=false
+      - QBT_LOG_LEVEL=INFO
+      - QBT_DIVIDER==
+      - QBT_WIDTH=100
+    volumes:
+	  - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERCONFDIR}/qbitmanage:/config
+      - ${DOCKERCONFDIR}/qbittorrent/data/BT_backup:/input # modify if needed
+      - ${DOCKERSTORAGEDIR}/torrents:/data/torrents        # modify if needed
+}
