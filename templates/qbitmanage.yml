@@ -36,8 +36,7 @@
       - QBT_DIVIDER==
       - QBT_WIDTH=100
     volumes:
-	  - /etc/localtime:/etc/localtime:ro
+      - /etc/localtime:/etc/localtime:ro
       - ${DOCKERCONFDIR}/qbitmanage:/config
       - ${DOCKERCONFDIR}/qbittorrent/data/BT_backup:/input # modify if needed
       - ${DOCKERSTORAGEDIR}/torrents:/data/torrents        # modify if needed
-}
