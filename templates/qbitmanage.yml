@@ -12,7 +12,7 @@
     labels:
       - org.hotio.pullio.update=${PULLIO_UPDATE}
       - org.hotio.pullio.notify=${PULLIO_NOTIFY}
-      - org.hotio.pullio.discord.webhook=${PULLIO_DISCORD_WEBHOOK
+      - org.hotio.pullio.discord.webhook=${PULLIO_DISCORD_WEBHOOK}
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
