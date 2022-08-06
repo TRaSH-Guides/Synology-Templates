@@ -18,7 +18,8 @@
       - PGID=${PGID}
       - UMASK=022
       - TZ=${TZ}
-      - QBT_RUN=true
+      - QBT_DRY_RUN=true
+      - QBT_RUN=false
       - QBT_SCHEDULE=1440
       - QBT_STARTUP_DELAY=30
       - QBT_CONFIG=config.yml
@@ -38,5 +39,5 @@
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERCONFDIR}/qbitmanage:/config
-      - ${DOCKERCONFDIR}/qbittorrent/data/BT_backup:/input # modify if needed
-      - ${DOCKERSTORAGEDIR}/torrents:/data/torrents        # modify if needed
+      - ${DOCKERCONFDIR}/qbittorrent/data/BT_backup:/qbit_appdata # modify if needed
+      - ${DOCKERSTORAGEDIR}/torrents:/data/torrents               # modify if needed
