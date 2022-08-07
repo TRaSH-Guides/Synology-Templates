@@ -2,7 +2,7 @@
 # <mkdir /volume1/docker/appdata/cross-seed>
   cross-seed-sb:
     container_name: cross-seed
-    image: mmgoodnow/cross-seed:latest
+    image: ghcr.io/cross-seed/cross-seed:latest:latest
     restart: unless-stopped
     logging:
       driver: json-file
