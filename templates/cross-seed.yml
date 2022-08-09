@@ -22,6 +22,6 @@
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERCONFDIR}/cross-seed:/config
-      - ${DOCKERCONFDIR}/qbittorrent/data/BT_backup:/input:ro
+      - ${DOCKERCONFDIR}/qbittorrent/data/BT_backup:/qbit_appdata:ro
       - ${DOCKERSTORAGEDIR}/torrents:/output
     command: daemon
