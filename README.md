@@ -10,3 +10,8 @@ in the `<application>.yml` file you will also find the command you need to use i
 ### Info
 
 I made use of [DockSTARTer](https://github.com/GhostWriters/DockSTARTer/tree/master/compose/.apps) as base for the the templates.
+
+
+### Infrastructure model
+
+![Infrastructure model](.infragenie/infrastructure_model.png)
