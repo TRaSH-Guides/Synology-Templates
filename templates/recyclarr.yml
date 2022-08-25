@@ -1,7 +1,7 @@
 # recyclarr - https://github.com/recyclarr/recyclarr
 #
-# Don't forget to create the directory, change chown command if needed (the user:group part)
-# mkdir /volume1/docker/appdata/recyclarr && sudo chown docker:users /volume1/docker/appdata/recyclarr
+# Don't forget to create the directory, change the -u value if needed (the created user)
+# sudo -u docker mkdir -m=00775 /volume1/docker/appdata/recyclarr
 #
   recyclarr:
     container_name: recyclarr
