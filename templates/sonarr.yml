@@ -1,5 +1,8 @@
 # Sonarr - https://hotio.dev/containers/sonarr/
-# <mkdir /volume1/docker/appdata/sonarr>
+#
+# Don't forget to create the directory, change the -u value if needed (the created user)
+# sudo -u docker mkdir -m=00775 /volume1/docker/appdata/sonarr
+#
   sonarr:
     container_name: sonarr
     image: cr.hotio.dev/hotio/sonarr:nightly
