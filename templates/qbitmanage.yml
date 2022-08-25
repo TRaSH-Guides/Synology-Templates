@@ -1,7 +1,7 @@
 # qbit_manage - https://hub.docker.com/r/hotio/qbitmanage
 #
 # Don't forget to create the directory, change chown command if needed (the user:group part)
-# mkdir /volume1/docker/appdata/qbitmanage && sudo chown docker:users /volume1/docker/appdata/qbitmanage
+# sudo -u docker mkdir -m=00775 /volume1/docker/appdata/qbitmanage
 #
   qbit_manage:
     container_name: qbitmanage
