@@ -1,5 +1,8 @@
 # Dozzle - https://dozzle.dev/
-# <mkdir /volume1/docker/appdata/dozzle>
+#
+# Don't forget to create the directory, change chown command if needed (the user:group part)
+# mkdir /volume1/docker/appdata/dozzle && sudo chown docker:users /volume1/docker/appdata/dozzle
+#
   dozzle:
     container_name: dozzle
     image: amir20/dozzle
