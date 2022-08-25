@@ -1,5 +1,8 @@
 # NZBGet - https://hotio.dev/containers/nzbget/
-# <mkdir /volume1/docker/appdata/nzbget>
+#
+# Don't forget to create the directory, change chown command if needed (the user:group part)
+# mkdir /volume1/docker/appdata/nzbget && sudo chown docker:users /volume1/docker/appdata/nzbget
+#
   nzbget:
     container_name: nzbget
     image: cr.hotio.dev/hotio/nzbget:latest
