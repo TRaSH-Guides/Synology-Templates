@@ -1,7 +1,7 @@
 # Bazarr - https://hotio.dev/containers/bazarr/
 #
 # Don't forget to create the directory, change chown command if needed (the user:group part)
-# mkdir /volume1/docker/appdata/bazarr && sudo chown docker:users /volume1/docker/appdata/bazarr
+# sudo -u docker mkdir -m=00775 /volume1/docker/appdata/bazarr
 #
   bazarr:
     container_name: bazarr
