@@ -1,5 +1,8 @@
 # SABnzbd - https://hotio.dev/containers/sabnzbd/
-# <mkdir /volume1/docker/appdata/sabnzbd>
+#
+# Don't forget to create the directory, change chown command if needed (the user:group part)
+# mkdir /volume1/docker/appdata/sabnzbd && sudo chown docker:users /volume1/docker/appdata/sabnzbd
+#
   sabnzbd:
     container_name: sabnzbd
     image: cr.hotio.dev/hotio/sabnzbd:latest
