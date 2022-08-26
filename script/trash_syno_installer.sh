@@ -439,15 +439,17 @@ printf '\n%b\n' " ${utick} User has rights to share."
 #################################################################################################################################################
 # Create the necessary file structure for vpn tunnel device
 # Thanks @Gabe
-if ! lsmod | grep -q "^tun\s"; then
-    insmod /lib/modules/tun.ko
-    cat > "/usr/local/etc/rc.d/tun.sh" << EOF
-    #!/bin/sh -e
+install_tun() {
+    if ! lsmod | grep -q "^tun\s"; then
+        insmod /lib/modules/tun.ko
+        cat > "/usr/local/etc/rc.d/tun.sh" << EOF
+        #!/bin/sh -e
 
-    insmod /lib/modules/tun.ko
+        insmod /lib/modules/tun.ko
 EOF
-    chmod a+x /usr/local/etc/rc.d/tun.sh
+        chmod a+x /usr/local/etc/rc.d/tun.sh
 fi
+}
 #################################################################################################################################################
 # Create docker-compose.yml and download .env
 #################################################################################################################################################
@@ -556,6 +558,7 @@ while true; do
                         [Yy]*)
                             printf '\n%b\n\n' " ${utick} With VPN"
                             mkdir -p "${docker_conf_dir}/appdata/qbittorrent/wireguard"
+                            install_tun
                             read -erp $' \e[93m\U25cf\e[0m '"Place your "$'\e[38;5;81m'"wg0.conf"$'\e[m'" in:"$'\n\n \e[38;5;81m'"${docker_conf_dir}/appdata/qbittorrent/wireguard"$'\e[m\n\n \e[93m\U25cf\e[0m '"When that is done please confirm "$'\e[38;5;10m'"[y]es"$'\e[m'" : " -i "" yes
                             case "${yes}" in
                                 [Yy]*)
