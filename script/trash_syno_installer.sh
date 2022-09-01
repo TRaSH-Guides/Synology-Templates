@@ -562,8 +562,20 @@ while true; do
                             read -erp $' \e[93m\U25cf\e[0m '"Place your "$'\e[38;5;81m'"wg0.conf"$'\e[m'" in:"$'\n\n \e[38;5;81m'"${docker_conf_dir}/appdata/qbittorrent/wireguard"$'\e[m\n\n \e[93m\U25cf\e[0m '"When that is done please confirm "$'\e[38;5;10m'"[y]es"$'\e[m'" : " -i "" yes
                             case "${yes}" in
                                 [Yy]*)
-                                    if sed -r 's|AllowedIPs = (.*)|AllowedIPs = 0.0.0.0/1,128.0.0.0/1|g' -i "${docker_conf_dir}/appdata/qbittorrent/wireguard/wg0.conf" 2> /dev/null; then
-                                        printf '\n%b\n' " ${utick} wg0.conf found and fixed."
+                                    if [[ -f "${docker_conf_dir}/appdata/qbittorrent/wireguard/wg0.conf" ]]; then
+                                        if sed -r 's|AllowedIPs = (.*)|AllowedIPs = 0.0.0.0/1,128.0.0.0/1|g' -i "${docker_conf_dir}/appdata/qbittorrent/wireguard/wg0.conf" 2> /dev/null; then
+                                            printf '\n%b\n' " ${utick} wg0.conf found and fixed."
+                                        fi
+
+                                        if curl -sL https://raw.githubusercontent.com/TRaSH-/Guides-Synology-Templates/main/script/PreUp.sh -o "${docker_conf_dir}/appdata/qbittorrent/wireguard/PreUp.sh"; then
+                                            printf '\n%b\n' " ${utick} PreUp.sh downloaded to ${docker_conf_dir}/appdata/qbittorrent/wireguard/PreUp.sh"
+                                        fi
+
+                                        if ! grep -q 'PreUp = bash /config/wireguard/PreUp.sh' "${docker_conf_dir}/appdata/qbittorrent/wireguard/wg0.conf"; then
+                                            if sed '/^\[Interface\]/!b;:a;n;/./ba;iPreUp = bash /config/wireguard/PreUp.sh' -i "${docker_conf_dir}/appdata/qbittorrent/wireguard/wg0.conf" 2> /dev/null; then
+                                                printf '\n%b\n' " ${utick} PreUp = bash /config/wireguard/PreUp.sh added to wg0.conf"
+                                            fi
+                                        fi
                                     else
                                         printf '\n%b\n\n ' " ${ucross} wg0.conf not found. Place file with filename ${clc}wg0.conf${cend} and restart script."
                                         exit 1
