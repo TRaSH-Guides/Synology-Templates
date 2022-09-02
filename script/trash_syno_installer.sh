@@ -595,8 +595,8 @@ while true; do
                 done
             fi
             printf '\n%b\n' " ${ulmc} Doing final permissions stuff"
-            chown -R "${user}":"${group}" "${docker_data_dir}" "${docker_conf_dir}"
-            chmod -R a=,a+rX,u+w,g+w "${docker_data_dir}" "${docker_conf_dir}"
+            chown -R "${user}":"${group}" "${docker_data_dir}" "${docker_conf_dir}/appdata"
+            chmod -R a=,a+rX,u+w,g+w "${docker_data_dir}" "${docker_conf_dir}/appdata"
             printf '\n%b\n' " ${utick} Permissions set."
 
             printf '\n%b\n' " ${uplus} Installing Pullio for auto updates"
