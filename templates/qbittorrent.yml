@@ -10,7 +10,7 @@
 # Start the container, and in your appdata/qbittorrent a wireguard folder will be created where you need to place your wg0.conf file you got from your VPN provider !!!
   qbittorrent:
     container_name: qbittorrent
-    image: cr.hotio.dev/hotio/qbittorrent:latest
+    image: cr.hotio.dev/hotio/qbittorrent:legacy
     restart: unless-stopped
     logging:
       driver: json-file
