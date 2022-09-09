@@ -448,7 +448,7 @@ install_tun() {
         insmod /lib/modules/tun.ko
 EOF
         chmod a+x /usr/local/etc/rc.d/tun.sh
-fi
+    fi
 }
 #################################################################################################################################################
 # Create docker-compose.yml and download .env
@@ -562,6 +562,7 @@ while true; do
                             read -erp $' \e[93m\U25cf\e[0m '"Place your "$'\e[38;5;81m'"wg0.conf"$'\e[m'" in:"$'\n\n \e[38;5;81m'"${docker_conf_dir}/appdata/qbittorrent/wireguard"$'\e[m\n\n \e[93m\U25cf\e[0m '"When that is done please confirm "$'\e[38;5;10m'"[y]es"$'\e[m'" : " -i "" yes
                             case "${yes}" in
                                 [Yy]*)
+                                    sed -r 's|VPN_ENABLED=false|VPN_ENABLED=true|g' -i "${docker_conf_dir}/appdata/.env"
                                     if [[ -f "${docker_conf_dir}/appdata/qbittorrent/wireguard/wg0.conf" ]]; then
                                         if sed -r 's|AllowedIPs = (.*)|AllowedIPs = 0.0.0.0/1,128.0.0.0/1|g' -i "${docker_conf_dir}/appdata/qbittorrent/wireguard/wg0.conf" 2> /dev/null; then
                                             printf '\n%b\n' " ${utick} wg0.conf found and fixed."
@@ -586,7 +587,6 @@ while true; do
                             ;;
                         [Nn]*)
                             printf '\n%b\n' " ${ucross} Without VPN."
-                            sed -r 's|VPN_ENABLED=true|VPN_ENABLED=false|g' -i "${docker_conf_dir}/appdata/.env"
                             sed -r 's|devices: #qbit|#devices: #qbit|g' -i "${docker_conf_dir}/appdata/docker-compose.yml"
                             sed -r 's|- /dev/net/tun:/dev/net/tun #qbit|#- /dev/net/tun:/dev/net/tun #qbit|g' -i "${docker_conf_dir}/appdata/docker-compose.yml"
                             break
