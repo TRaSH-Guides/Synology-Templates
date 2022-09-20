@@ -4,7 +4,7 @@
 # sudo -u docker mkdir -m=00775 /volume1/docker/appdata/qbittorrent
 #
 # If you want to use VPN follow the instructions below.
-# To enable VPN set "VPN_ENABLED=true" in the .env, if you don't want VPN enabled set "VPN_ENABLED=false"
+# To enable VPN set "VPN_ENABLED=true" in the .env, and uncomment the 'devices' section below. If you don't want VPN enabled set "VPN_ENABLED=false"
 # Make the changes to the wg0.conf files as described here https://hotio.dev/containers/qbittorrent/#wireguard-go.
 # If you use TorGuard do not add "PreUp = bash /config/wireguard/torguard.sh" to the wg0.conf, this will break the VPN connection.
 # Start the container, and in your appdata/qbittorrent a wireguard folder will be created where you need to place your wg0.conf file you got from your VPN provider !!!
@@ -26,8 +26,8 @@
       - ${QBITTORRENT_PRIVOXY_PORT}:${QBITTORRENT_PRIVOXY_PORT}
     cap_add:
       - NET_ADMIN
-    devices:
-      - /dev/net/tun:/dev/net/tun
+#   devices:                              # Optional, uncomment if you use VPN
+#     - /dev/net/tun:/dev/net/tun         # Optional, uncomment if you use VPN
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
       - net.ipv6.conf.all.disable_ipv6=1  # Optional, if you want to use ipv6, remove this line. If you keep this line, make sure there is no ipv6 in your wg0.conf.
