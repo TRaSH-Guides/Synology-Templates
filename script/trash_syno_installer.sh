@@ -501,7 +501,7 @@ get_app_compose() {
 
         [[ "${options}" = 'sabnzbd' ]] && sed -r 's|- 8080:8080$|- 7080:8080|g' -i "${docker_conf_dir}/appdata/${1}.yml"
         [[ "${options}" == 'dozzle' ]] && sed -r 's|- 8080:8080$|- 7081:8080|g' -i "${docker_conf_dir}/appdata/${1}.yml"
-        [[ "${options}" == 'qbittorrent' ]] && sed -r -e 's|devices:|devices: #qbit|g' -i "${docker_conf_dir}/appdata/${1}.yml" && sed -r 's|- /dev/net/tun:/dev/net/tun|- /dev/net/tun:/dev/net/tun #qbit|g' -i "${docker_conf_dir}/appdata/${1}.yml"
+        #[[ "${options}" == 'qbittorrent' ]] && sed -r -e 's|devices:|devices: #qbit|g' -i "${docker_conf_dir}/appdata/${1}.yml" && sed -r 's|- /dev/net/tun:/dev/net/tun|- /dev/net/tun:/dev/net/tun #qbit|g' -i "${docker_conf_dir}/appdata/${1}.yml"
 
         sed -n 'p' "${docker_conf_dir}/appdata/${1}.yml" >> "${docker_conf_dir}/appdata/docker-compose.yml"
         rm -f "${docker_conf_dir}/appdata/${1}.yml"
@@ -563,6 +563,8 @@ while true; do
                             case "${yes}" in
                                 [Yy]*)
                                     sed -r 's|VPN_ENABLED=false|VPN_ENABLED=true|g' -i "${docker_conf_dir}/appdata/.env"
+                                    sed -r 's|#   devices:|    devices:|g' -i "${docker_conf_dir}/appdata/docker-compose.yml"
+                                    sed -r 's|#     - /dev/net/tun:/dev/net/tun|      - /dev/net/tun:/dev/net/tun|g' -i "${docker_conf_dir}/appdata/docker-compose.yml"
                                     if [[ -f "${docker_conf_dir}/appdata/qbittorrent/wireguard/wg0.conf" ]]; then
                                         if sed -r 's|AllowedIPs = (.*)|AllowedIPs = 0.0.0.0/1,128.0.0.0/1|g' -i "${docker_conf_dir}/appdata/qbittorrent/wireguard/wg0.conf" 2> /dev/null; then
                                             printf '\n%b\n' " ${utick} wg0.conf found and fixed."
@@ -587,7 +589,7 @@ while true; do
                             ;;
                         [Nn]*)
                             printf '\n%b\n' " ${ucross} Without VPN."
-                            sed -r 's|devices: #qbit|#devices: #qbit|g' -i "${docker_conf_dir}/appdata/docker-compose.yml"
+                            #sed -r 's|devices: #qbit|#devices: #qbit|g' -i "${docker_conf_dir}/appdata/docker-compose.yml"
                             sed -r 's|- /dev/net/tun:/dev/net/tun #qbit|#- /dev/net/tun:/dev/net/tun #qbit|g' -i "${docker_conf_dir}/appdata/docker-compose.yml"
                             break
                             ;;
