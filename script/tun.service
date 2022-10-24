@@ -1,0 +1,12 @@
+[Unit]
+Description=Run tun at startup
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/sbin/insmod /lib/modules/tun.ko
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

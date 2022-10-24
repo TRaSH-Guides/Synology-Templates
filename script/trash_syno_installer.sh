@@ -78,6 +78,16 @@ printf '\n%b\n' '\e[38;2;64;81;181m ⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠿⠿⠿⠿�
  ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿\e[0m'
 sleep 2
 #################################################################################################################################################
+# check DSM Version
+#################################################################################################################################################
+# Get current DSM version running
+currentver="$(cat /etc/VERSION | grep productversion | sed 's/productversion=\"//' | sed 's/\"//' $currentver)"
+requiredver="7.0.0"
+ if [ "$(printf '%s\n' "$requiredver" "$currentver" | sort -V | head -n1)" != "$requiredver" ]; then 
+     printf "\n%b\n" " ${ulrc} Script is only compatible with DSM 7.0 and higher."
+	 exit 1
+ fi
+#################################################################################################################################################
 # check for root access and exit if the user does not have the required privileges.
 #################################################################################################################################################
 if [[ "$(id -un)" != 'root' ]]; then
@@ -439,17 +449,34 @@ printf '\n%b\n' " ${utick} User has rights to share."
 #################################################################################################################################################
 # Create the necessary file structure for vpn tunnel device
 # Thanks @Gabe
-install_tun() {
-    if ! lsmod | grep -q "^tun\s"; then
-        insmod /lib/modules/tun.ko
-        cat > "/usr/local/etc/rc.d/tun.sh" << EOF
-        #!/bin/sh -e
-
-        insmod /lib/modules/tun.ko
-EOF
-        chmod a+x /usr/local/etc/rc.d/tun.sh
-    fi
-}
+# Old method:
+#install_tun() {
+#    if ! lsmod | grep -q "^tun\s"; then
+#        insmod /lib/modules/tun.ko
+#        cat > "/usr/local/etc/rc.d/tun.sh" << EOF
+#        #!/bin/sh -e
+#
+#        insmod /lib/modules/tun.ko
+#EOF
+#        chmod a+x /usr/local/etc/rc.d/tun.sh
+#    fi
+#}
+# New method:
+if curl -sL https://raw.githubusercontent.com/TRaSH-/Guides-Synology-Templates/main/script/tun.service -o "/etc/systemd/system/tun.service"; then
+   printf '\n%b\n' " ${utick} Service file to start Tun downloaded."
+fi 
+if systemctl enable /etc/systemd/system/tun.service; then
+   printf '\n%b\n' " ${utick} Service enabled."
+fi
+systemctl start tun
+systemctl is-active --quiet tun
+ if [ $? -eq 1 ]; then
+   printf "\n%b\n" " ${ulrc} Service couldn't start properly."
+   printf "\n%b\n" " ${tb} If you're seeing this you might already have a tun file."
+   exit 1
+ else
+   printf '\n%b\n' " ${utick} Service enabled."
+fi
 #################################################################################################################################################
 # Create docker-compose.yml and download .env
 #################################################################################################################################################
