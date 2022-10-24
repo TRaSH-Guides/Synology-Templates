@@ -81,7 +81,8 @@ sleep 2
 # check DSM Version
 #################################################################################################################################################
 # Get current DSM version running
-currentver="$(< /etc/VERSION grep productversion | sed 's/productversion=\"//' | sed 's/\"//')"
+# shellcheck source=/dev/null
+currentver="$(. /etc/VERSION && echo "${productversion:?}")"
 requiredver="7.0.0"
  if [ "$(printf '%s\n' "$requiredver" "$currentver" | sort -V | head -n1)" != "$requiredver" ]; then 
      printf "\n%b\n" " ${ulrc} Script is only compatible with DSM 7.0 and higher."
