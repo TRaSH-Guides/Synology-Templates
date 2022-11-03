@@ -463,21 +463,23 @@ printf '\n%b\n' " ${utick} User has rights to share."
 #    fi
 #}
 # New method:
-if curl -sL https://raw.githubusercontent.com/TRaSH-/Guides-Synology-Templates/main/script/tun.service -o "/etc/systemd/system/tun.service"; then
-   printf '\n%b\n' " ${utick} Service file to start Tun downloaded."
-fi 
-if systemctl enable /etc/systemd/system/tun.service; then
-   printf '\n%b\n' " ${utick} Service enabled."
-fi
-systemctl start tun
-systemctl is-active --quiet tun
- if [ $? -eq 1 ]; then
-   printf "\n%b\n" " ${ulrc} Service couldn't start properly."
-   printf "\n%b\n" " ${tb} If you're seeing this you might already have a tun file."
-   exit 1
- else
-   printf '\n%b\n' " ${utick} Service enabled."
-fi
+install_tun() {
+    if curl -sL https://raw.githubusercontent.com/TRaSH-/Guides-Synology-Templates/main/script/tun.service -o "/etc/systemd/system/tun.service"; then
+         printf '\n%b\n' " ${utick} Service file to start Tun downloaded."
+    fi 
+    if systemctl enable /etc/systemd/system/tun.service; then
+        printf '\n%b\n' " ${utick} Service enabled."
+    fi
+    systemctl start tun
+    systemctl is-active --quiet tun
+    if [ $? -eq 1 ]; then
+        printf "\n%b\n" " ${ulrc} Service couldn't start properly."
+        printf "\n%b\n" " ${tb} If you're seeing this you might already have a tun file."
+        exit 1
+    else
+        printf '\n%b\n' " ${utick} Service enabled."
+    fi
+}
 #################################################################################################################################################
 # Create docker-compose.yml and download .env
 #################################################################################################################################################
