@@ -1,0 +1,28 @@
+# unpackerr - https://hub.docker.com/r/hotio/unpackerr
+#
+# Don't forget to create the directory
+# sudo mkdir -m=00775 /volume1/docker/appdata/unpackerr
+#
+  unpackerr:
+    container_name: unpackerr
+    image: cr.hotio.dev/hotio/unpackerr:release
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-file: ${DOCKERLOGGING_MAXFILE}
+        max-size: ${DOCKERLOGGING_MAXSIZE}
+    labels:
+      - org.hotio.pullio.update=${PULLIO_UPDATE}
+      - org.hotio.pullio.notify=${PULLIO_NOTIFY}
+      - org.hotio.pullio.discord.webhook=${PULLIO_DISCORD_WEBHOOK}
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK=${UMASK}
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKERCONFDIR}/unpackerr:/config
+      - ${DOCKERSTORAGEDIR}:/data
+    security_opt:
+      - no-new-privileges:true
