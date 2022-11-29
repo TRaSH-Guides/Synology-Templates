@@ -5,7 +5,7 @@
 #
   qbit_manage:
     container_name: qbitmanage
-    image: cr.hotio.dev/hotio/qbitmanage:latest
+    image: bobokun/qbit_manage
     restart: unless-stopped
     logging:
       driver: json-file
