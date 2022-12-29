@@ -7,6 +7,7 @@
     container_name: cross-seed
     image: ghcr.io/cross-seed/cross-seed:latest
     restart: unless-stopped
+    user: ${PUID}:${PGID}
     logging:
       driver: json-file
       options:
@@ -19,8 +20,6 @@
     ports:
       - 2468:2468
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
       - TZ=${TZ}
     volumes:
       - /etc/localtime:/etc/localtime:ro
