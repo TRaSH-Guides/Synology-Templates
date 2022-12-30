@@ -14,10 +14,11 @@
       options:
         max-file: ${DOCKERLOGGING_MAXFILE}
         max-size: ${DOCKERLOGGING_MAXSIZE}
-    user: ${PUID}:${PGID}
     ports:
       - 5454:5454
     environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
       - TZ=${TZ}
     volumes:
       - ${DOCKERCONFDIR}/notifiarr:/config
