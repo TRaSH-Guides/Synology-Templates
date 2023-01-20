@@ -1,9 +1,9 @@
-# Plex - https://hotio.dev/containers/plex/
+# Jellyfin - https://hotio.dev/containers/jellyfin/
 #
 # Don't forget to create the directory, change chown command if needed (the user:group part)
-# sudo -u docker mkdir -m=00775 /volume1/docker/appdata/plex
+# sudo -u docker mkdir -m=00775 /volume1/docker/appdata/jellyfin
 #
-  plex:
+  jellyfin:
     container_name: jellyfin
     image: cr.hotio.dev/hotio/jellyfin
     restart: unless-stopped
