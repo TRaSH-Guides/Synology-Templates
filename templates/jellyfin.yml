@@ -17,7 +17,7 @@
       - org.hotio.pullio.notify=${PULLIO_NOTIFY}
       - org.hotio.pullio.discord.webhook=${PULLIO_DISCORD_WEBHOOK}
     ports:
-      - 32400:32400
+      - 8096:8096
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
