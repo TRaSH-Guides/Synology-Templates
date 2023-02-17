@@ -16,6 +16,5 @@
     environment:
       - TZ=${TZ}
       - CRON_SCHEDULE=@daily
-    init: true
     volumes:
       - ${DOCKERCONFDIR}/recyclarr:/config
