@@ -1,7 +1,7 @@
 {
   "templates": [
-    "autobrr",
     "authelia",
+    "autobrr",
     "bazarr",
     "cross-seed",
     "dozzle",
