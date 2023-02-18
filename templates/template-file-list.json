@@ -1,5 +1,6 @@
 {
   "templates": [
+    "autobrr",
     "authelia",
     "bazarr",
     "cross-seed",
