@@ -9,7 +9,13 @@
 # Edit the wg0.conf, change AllowedIPs to 0.0.0.0/1,128.0.0.0/1
 # Remove any preexisting preup or postup from your wg0.conf file.
 # Add this preup to your wg0 (read the instructions): https://github.com/TRaSH-/Guides-Synology-Templates/blob/main/script/PreUp.sh
-# If you are getting a "Failed to open '/dev/net/tun'" error, run "sudo insmod /lib/modules/tun.ko" in the terminal and try again.
+#
+# If you are getting a "Failed to open '/dev/net/tun'" error, run the commands below.
+# 1 - sudo curl -sL https://raw.githubusercontent.com/TRaSH-/Guides-Synology-Templates/main/script/tun.service -o "/etc/systemd/system/tun.service"
+# 2"- sudo systemctl enable /etc/systemd/system/tun.service
+# 3 - sudo systemctl start tun
+# Check if running with - sudo systemctl status tun
+# recreate the container with - sudo docker-compose up --force-recreate qbittorrent
 
   qbittorrent:
     container_name: qbittorrent
