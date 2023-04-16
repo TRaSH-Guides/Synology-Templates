@@ -564,7 +564,7 @@ while true; do
                 [[ "${options}" == 'qbittorrent' ]] && qbit_installed="yes"
                 [[ "${options}" == 'radarr' ]] && mkdir -p "${docker_data_dir}/media/movies"
                 [[ "${options}" == 'sonarr' ]] && mkdir -p "${docker_data_dir}/media/tv"
-                [[ "${options}" =~ ^(sabnzbd|nzbget)$ ]] && mkdir -p "${docker_data_dir}"/usenet/{tv,movies}
+                [[ "${options}" =~ ^(sabnzbd|nzbget)$ ]] && mkdir -p "${docker_data_dir}"/usenet/complete/{tv,movies}
                 [[ "${options}" == 'qbittorrent' ]] && mkdir -p "${docker_data_dir}"/torrents/{tv,movies}
             done
 
