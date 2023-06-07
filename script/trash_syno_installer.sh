@@ -499,14 +499,37 @@ fi
 # Check for user
 #################################################################################################################################################
 printf '\n%b\n' " ${ulbc} Checking if user ${clm}docker${cend} exists"
-if ! synouser --get "${user}" &> /dev/null; then
+if synouser --get "docker" &> /dev/null; then
+    printf '\n%b\n' " ${utick} User ${clm}docker${cend} exists!"
+else
     printf '\n%b\n' " ${ucross} The user ${clm}docker${cend} doesn't exist, creating a user for security purposes."
     read -p "Enter a username: " user
-    read -p "Enter a password for $user: " password
-    synouser --add "${user}" "${password}" "Docker User" 0 "" 0
-    printf '\n%b\n' " ${utick} User ${clm}$user${cend} created!"
-else
-    printf '\n%b\n' " ${utick} User ${clm}docker${cend} exists!"
+
+    if [ -z "$user" ]; then
+        printf '\n%b\n' " ${ucross} Username cannot be empty. Aborting..."
+        exit 1
+    fi
+
+    if synouser --get "$user" &> /dev/null; then
+        printf '\n%b\n' " ${ucross} The user ${clm}$user${cend} already exists. Skipping user creation..."
+    else
+        read -s -p "Enter a password for $user: " password
+        printf '\n'
+
+        if [ -z "$password" ]; then
+            printf '\n%b\n' " ${ucross} Password cannot be empty. Aborting..."
+            exit 1
+        fi
+
+        synouser --add "$user" "$password" "Docker User" 0 "" 0
+
+        if [ $? -eq 0 ]; then
+            printf '\n%b\n' " ${utick} User ${clm}$user${cend} created!"
+        else
+            printf '\n%b\n' " ${ucross} Failed to create user ${clm}$user${cend}. Aborting..."
+            exit 1
+        fi
+    fi
 fi
 #################################################################################################################################################
 # check for /data share
@@ -556,6 +579,31 @@ install_tun() {
 #################################################################################################################################################
 # Create docker-compose.yml and download .env
 #################################################################################################################################################
+#check if docker-compose already exist before overwriting.
+file="${docker_conf_dir}/appdata/docker-compose.yml"
+if [ ! -f "$file" ]; then
+    read -erp $' \e[32m\U2714\e[0m '"docker-compose.yml already exists, overwrite? "$'\e[38;5;10m'"[y]es"$'\e[m'" or "$'\e[38;5;9m'"[n]o"$'\e[m'" : " -i "y" yesno
+    case "${yesno}" in
+        [Yy]*)
+printf '\n%b\n' '" ${ulmc} "Overwriting file..."'
+printf '\n%b\n' " ${ulmc} bootstrapping docker-compose.yml"
+mkdir -p "${docker_conf_dir}/appdata"
+cat > "${docker_conf_dir}/appdata/docker-compose.yml" << EOF
+version: "3.2"
+services:
+EOF
+            ;;
+        [Nn]*)
+            printf '\n%b\n' " ${ulmc} Not overwriting docker-compose.yml"
+            # Add your code here for handling when not overwriting the file
+            exit 0
+            ;;
+        *)
+            echo "Invalid response. Exiting."
+            exit 1
+            ;;
+    esac
+else
 printf '\n%b\n' " ${ulmc} bootstrapping docker-compose.yml"
 mkdir -p "${docker_conf_dir}/appdata"
 cat > "${docker_conf_dir}/appdata/docker-compose.yml" << EOF
@@ -563,6 +611,7 @@ version: "3.2"
 services:
 EOF
 printf '\n%b\n' " ${utick} docker-compose.yml bootstrapped"
+fi
 
 printf '\n%b\n' " ${ulmc} Downloading docker .env"
 if wget -qO "${docker_conf_dir}/appdata/.env" https://raw.githubusercontent.com/TRaSH-/Guides-Synology-Templates/main/docker-compose/.env; then
