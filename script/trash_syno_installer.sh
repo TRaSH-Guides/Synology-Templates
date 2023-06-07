@@ -84,6 +84,7 @@ sleep 2
 # shellcheck source=/dev/null
 currentver="$(. /etc/VERSION && echo "${productversion:?}")"
 requiredver="7.0.0"
+cmversion="7.2"
  if [ "$(printf '%s\n' "$requiredver" "$currentver" | sort -V | head -n1)" != "$requiredver" ]; then 
      printf "\n%b\n" " ${ulrc} Script is only compatible with DSM 7.0 and higher."
 	 exit 1
@@ -294,32 +295,68 @@ mapfile -t volume_list_array < <(mount -l | grep -E "/volume[0-9]{1,2}\s" | awk 
 [[ "${#volume_list_array[@]}" -eq '1' ]] && docker_install_volume="${volume_list_array[0]}" docker_install_volume_id="${volume_list_array[0]#\/volume}"
 
 # If docker is installed we will get the default path from docker and use that to set the variable - docker_install_volume - else set docker to be isntalled
-if [[ "$(
-    synopkg status Docker &> /dev/null
-    printf '%b' "$?"
-)" -le '1' ]]; then
-    docker_install_volume="$(sed -rn 's|(.*)path=(/volume(.*))/docker|\2|p' /etc/samba/smb.share.conf)"
-    install_docker="no"
+if [[ "$(printf '%s\n' "$cmversion" "$currentver" | sort -V | head -n1)" == "$cmversion" ]]; then
+    # DSM version is > 7.2, check if package is installed
+    if [[ "$(
+        synopkg status ContainerManager &> /dev/null
+        printf '%b' "$?")" -le '1' ]]; then
+        # Package is already installed
+        docker_install_volume="$(sed -rn 's|(.*)path=(/volume(.*))/docker|\2|p' /etc/samba/smb.share.conf)"
+        install_containermanager="no"
+    else
+        # Package is not installed, install it
+        install_containermanager="yes"
+        # Add your installation command for the package here
+    fi
 else
-    install_docker="yes"
+    if [[ "$(
+        synopkg status Docker &> /dev/null
+        printf '%b' "$?")" -le '1' ]]; then
+        # Package is already installed, check paths
+        docker_install_volume="$(sed -rn 's|(.*)path=(/volume(.*))/docker|\2|p' /etc/samba/smb.share.conf)"
+        install_docker="no"
+    else
+        # Package is not installed, install it
+        install_docker="yes"
+        # Add your installation command for the package here
+    fi
 fi
 
-# if docker neeeds to be installed but there is more than one volume ask the user which volume they want to use for the installation and set this to the variable - docker_install_volume
-if [[ "${install_docker}" == 'yes' && "${#volume_list_array[@]}" -gt '1' ]]; then
-    PS3=$'\n \e[94m\U25cf\e[m '"Please select where to install docker from the list of volumes: "$'\n\n '
-    printf "\n%b\n\n" " ${uyc} This is where docker will be installed and the conf dirs stored"
-    select option in "${volume_list_array[@]}"; do # in "$@" is the default
-        if [[ "$REPLY" -gt "${#volume_list_array[@]}" ]]; then
-            printf '\n%b\n\n' " ${ucross}This is not a valid volume option, try again"
-        else
-            docker_install_volume="$(printf '%s' "${option}")"
-            read -erp $'\n \e[32m\U2714\e[0m '"You selected "$'\e[96m'"${docker_install_volume}"$'\e[m'" is this correct "$'\e[32m'"[y]es"$'\e[m'" or "$'\e[31m'"[n]o"$'\e[m'" : " -i "y" confirm
-            if [[ "${confirm}" =~ ^[yY](es)?$ ]]; then
-                docker_install_volume_id="${docker_install_volume#\/volume}"
-                break
+# if docker needs to be installed but there is more than one volume ask the user which volume they want to use for the installation and set this to the variable - docker_install_volume
+if [[ "$(printf '%s\n' "$cmversion" "$currentver" | sort -V | head -n1)" == "$cmversion" ]]; then
+    if [[ "${install_containermanager}" == 'yes' && "${#volume_list_array[@]}" -gt '1' ]]; then
+        PS3=$'\n \e[94m\U25cf\e[m '"Please select where to install docker from the list of volumes: "$'\n\n '
+        printf "\n%b\n\n" " ${uyc} This is where docker will be installed and the conf dirs stored"
+        select option in "${volume_list_array[@]}"; do # in "$@" is the default
+            if [[ "$REPLY" -gt "${#volume_list_array[@]}" ]]; then
+                printf '\n%b\n\n' " ${ucross}This is not a valid volume option, try again"
+            else
+                docker_install_volume="$(printf '%s' "${option}")"
+                read -erp $'\n \e[32m\U2714\e[0m '"You selected "$'\e[96m'"${docker_install_volume}"$'\e[m'" is this correct "$'\e[32m'"[y]es"$'\e[m'" or "$'\e[31m'"[n]o"$'\e[m'" : " -i "y" confirm
+                if [[ "${confirm}" =~ ^[yY](es)?$ ]]; then
+                    docker_install_volume_id="${docker_install_volume#\/volume}"
+                    break
+                fi
             fi
-        fi
-    done
+        done
+    fi
+else
+    if [[ "${install_docker}" == 'yes' && "${#volume_list_array[@]}" -gt '1' ]]; then
+        PS3=$'\n \e[94m\U25cf\e[m '"Please select where to install docker from the list of volumes: "$'\n\n '
+        printf "\n%b\n\n" " ${uyc} This is where docker will be installed and the conf dirs stored"
+        select option in "${volume_list_array[@]}"; do # in "$@" is the default
+            if [[ "$REPLY" -gt "${#volume_list_array[@]}" ]]; then
+                printf '\n%b\n\n' " ${ucross}This is not a valid volume option, try again"
+            else
+                docker_install_volume="$(printf '%s' "${option}")"
+                read -erp $'\n \e[32m\U2714\e[0m '"You selected "$'\e[96m'"${docker_install_volume}"$'\e[m'" is this correct "$'\e[32m'"[y]es"$'\e[m'" or "$'\e[31m'"[n]o"$'\e[m'" : " -i "y" confirm
+                if [[ "${confirm}" =~ ^[yY](es)?$ ]]; then
+                    docker_install_volume_id="${docker_install_volume#\/volume}"
+                    break
+                fi
+            fi
+        done
+    fi
 fi
 
 if [[ "${#volume_list_array[@]}" -gt '1' ]]; then
@@ -362,26 +399,28 @@ synoinfo_default_path="$(sed -rn 's|(.*)(pkg_def_intall_vol="(.*)")|\2|p' /etc/s
 qsv="/dev/dri/"
 # get the lastest docker version by scraping the archive.synology.com page for the package.
 docker_version=$(curl -sL "https://archive.synology.com/download/Package/Docker" | sed -rn 's|(.*)href="/download/Package/Docker/(.*)" (.*)|\2|p' | head -n 1) # get the lastest docker version
+containermanager_ver=$(curl -sL "https://archive.synology.com/download/Package/ContainerManager" | sed -rn 's|(.*)href="/download/Package/ContainerManager/(.*)" (.*)|\2|p' | head -n 1) # get the lastest containermanager version
 #################################################################################################################################################
 # Install Docker
 #################################################################################################################################################
 # Install docker if install_docker=yes or skip
-if [[ "${install_docker}" == 'yes' ]]; then
-    printf "\n%b\n\n" " ${uplus} Installing Docker package"
-    # We need to change this to the selected path to make it install where the user chose for it to go. Then reveert it back to default after.
-    if [[ "${#volume_list_array[@]}" -gt '1' ]]; then
-        if grep -Eq '^pkg_def_intall_vol="(.*)"$' /etc/synoinfo.conf; then
-            printf '%b\n\n' " ${ulmc} Modifying ${clc}pkg_def_intall_vol${cend} to ${clc}${docker_install_volume}${cend}"
-            sed -r 's|pkg_def_intall_vol="(.*)"|pkg_def_intall_vol="'"${docker_install_volume}"'"|g' -i.synoinfo.conf.bak-"$(date +%H-%M-%b)" /etc/synoinfo.conf
-        else
-            printf '%b\n\n' " ${ulmc} Setting ${clc}pkg_def_intall_vol${cend} to ${clc}${docker_install_volume}${cend}"
-            printf '%s\n' "pkg_def_intall_vol=\"${docker_install_volume}\"" >> /etc/synoinfo.conf
+if [[ "$(printf '%s\n' "$cmversion" "$currentver" | sort -V | head -n1)" == "$cmversion" ]]; then
+    if [[ "${install_containermanager}" == 'yes' ]]; then
+        printf "\n%b\n\n" " ${uplus} Installing Container Manager package"
+        # We need to change this to the selected path to make it install where the user chose for it to go. Then revert it back to default after.
+        if [[ "${#volume_list_array[@]}" -gt '1' ]]; then
+            if grep -Eq '^pkg_def_intall_vol="(.*)"$' /etc/synoinfo.conf; then
+                printf '%b\n\n' " ${ulmc} Modifying ${clc}pkg_def_intall_vol${cend} to ${clc}${docker_install_volume}${cend}"
+                sed -r 's|pkg_def_intall_vol="(.*)"|pkg_def_intall_vol="'"${docker_install_volume}"'"|g' -i.synoinfo.conf.bak-"$(date +%H-%M-%b)" /etc/synoinfo.conf
+            else
+                printf '%b\n\n' " ${ulmc} Setting ${clc}pkg_def_intall_vol${cend} to ${clc}${docker_install_volume}${cend}"
+                printf '%s\n' "pkg_def_intall_vol=\"${docker_install_volume}\"" >> /etc/synoinfo.conf
+            fi
+            synoinfo_modified="true"
         fi
-        synoinfo_modified="true"
-    fi
 
-    wget -qO "${docker_install_volume}/docker.spk" "https://global.download.synology.com/download/Package/spk/Docker/${docker_version}/Docker-x64-${docker_version}.spk"
-    eval synopkg install "${docker_install_volume}/docker.spk" "${hide_all}"
+    wget -qO "${docker_install_volume}/containermanager.spk" "https://global.download.synology.com/download/Package/spk/ContainerManager/${containermanager_ver}/ContainerManager-x86_64-${containermanager_ver}.spk"
+    eval synopkg install "${docker_install_volume}/containermanager.spk" "${hide_all}"
 
     # We need to change this to back to the default after the docker application is installed
     if [[ "${synoinfo_modified}" == 'true' && -n "${synoinfo_default_path}" ]]; then
@@ -391,23 +430,70 @@ if [[ "${install_docker}" == 'yes' ]]; then
         printf '%b\n' " ${uyc} ${clc}synoinfo_default_path${cend} was not set and reverted to empty"
         sed -r 's|pkg_def_intall_vol="(.*)"|pkg_def_intall_vol=""|g' -i /etc/synoinfo.conf
     fi
+    else
+        printf "\n ${utick} %b\n" "Container Manager package is already installed"
+    fi
 else
-    printf "\n ${utick} %b\n" "Docker package is already installed"
+    if [[ "${install_docker}" == 'yes' ]]; then
+        printf "\n%b\n\n" " ${uplus} Installing Docker package"
+        # We need to change this to the selected path to make it install where the user chose for it to go. Then reveert it back to default after.
+        if [[ "${#volume_list_array[@]}" -gt '1' ]]; then
+            if grep -Eq '^pkg_def_intall_vol="(.*)"$' /etc/synoinfo.conf; then
+                printf '%b\n\n' " ${ulmc} Modifying ${clc}pkg_def_intall_vol${cend} to ${clc}${docker_install_volume}${cend}"
+                sed -r 's|pkg_def_intall_vol="(.*)"|pkg_def_intall_vol="'"${docker_install_volume}"'"|g' -i.synoinfo.conf.bak-"$(date +%H-%M-%b)" /etc/synoinfo.conf
+            else
+                printf '%b\n\n' " ${ulmc} Setting ${clc}pkg_def_intall_vol${cend} to ${clc}${docker_install_volume}${cend}"
+                printf '%s\n' "pkg_def_intall_vol=\"${docker_install_volume}\"" >> /etc/synoinfo.conf
+            fi
+            synoinfo_modified="true"
+        fi
+
+        wget -qO "${docker_install_volume}/docker.spk" "https://global.download.synology.com/download/Package/spk/Docker/${docker_version}/Docker-x64-${docker_version}.spk"
+        eval synopkg install "${docker_install_volume}/docker.spk" "${hide_all}"
+
+        # We need to change this to back to the default after the docker application is installed
+        if [[ "${synoinfo_modified}" == 'true' && -n "${synoinfo_default_path}" ]]; then
+            printf '%b\n' " ${uyc} ${clc}synoinfo_default_path${cend} was reverted to: ${clc}${synoinfo_default_path}${cend}"
+            sed -r 's|pkg_def_intall_vol="(.*)"|pkg_def_intall_vol="'"$synoinfo_default_path"'"|g' -i /etc/synoinfo.conf
+        else
+            printf '%b\n' " ${uyc} ${clc}synoinfo_default_path${cend} was not set and reverted to empty"
+            sed -r 's|pkg_def_intall_vol="(.*)"|pkg_def_intall_vol=""|g' -i /etc/synoinfo.conf
+        fi
+    else
+        printf "\n ${utick} %b\n" "Docker package is already installed"
+    fi
 fi
 
-synopkg start Docker &> /dev/null
+if [[ "$(printf '%s\n' "$cmversion" "$currentver" | sort -V | head -n1)" == "$cmversion" ]]; then
+    synopkg start ContainerManager &> /dev/null
+else
+    synopkg start Docker &> /dev/null
+fi
 #################################################################################################################################################
 # Test Docker
 #################################################################################################################################################
-if [[ "$(
-    synopkg status Docker &> /dev/null
-    printf '%s' "$?"
-)" -le '0' ]]; then
-    [[ -f "${docker_install_volume}/docker.spk" ]] && rm -f "${docker_install_volume}/docker.spk"
-    printf '\n%b\n' " ${utick} Docker is running!"
+if [[ "$(printf '%s\n' "$cmversion" "$currentver" | sort -V | head -n1)" == "$cmversion" ]]; then
+    if [[ "$(
+        synopkg status ContainerManager &> /dev/null
+        printf '%s' "$?"
+    )" -le '0' ]]; then
+        [[ -f "${docker_install_volume}/containermanager.spk" ]] && rm -f "${docker_install_volume}/containermanager.spk"
+        printf '\n%b\n' " ${utick} Container Manager is running!"
+    else
+        printf '\n%b\n\n' " ${ucross} Container Manager installation has not worked, please try again"
+        exit 1
+    fi
 else
-    printf '\n%b\n\n' " ${ucross} Docker installation has not worked, please try again"
-    exit 1
+    if [[ "$(
+        synopkg status Docker &> /dev/null
+        printf '%s' "$?"
+    )" -le '0' ]]; then
+        [[ -f "${docker_install_volume}/docker.spk" ]] && rm -f "${docker_install_volume}/docker.spk"
+        printf '\n%b\n' " ${utick} Docker is running!"
+    else
+        printf '\n%b\n\n' " ${ucross} Docker installation has not worked, please try again"
+        exit 1
+    fi
 fi
 #################################################################################################################################################
 # Check for user
@@ -448,21 +534,6 @@ printf '\n%b\n' " ${utick} User has rights to share."
 #################################################################################################################################################
 # VPN stuff
 #################################################################################################################################################
-# Create the necessary file structure for vpn tunnel device
-# Thanks @Gabe
-# Old method:
-#install_tun() {
-#    if ! lsmod | grep -q "^tun\s"; then
-#        insmod /lib/modules/tun.ko
-#        cat > "/usr/local/etc/rc.d/tun.sh" << EOF
-#        #!/bin/sh -e
-#
-#        insmod /lib/modules/tun.ko
-#EOF
-#        chmod a+x /usr/local/etc/rc.d/tun.sh
-#    fi
-#}
-# New method:
 install_tun() {
     if curl -sL https://raw.githubusercontent.com/TRaSH-/Guides-Synology-Templates/main/script/tun.service -o "/etc/systemd/system/tun.service"; then
          printf '\n%b\n' " ${utick} Service file to start Tun downloaded."
@@ -508,7 +579,7 @@ sed -i "s|192.168.x.x:32400|${ip}:32400|g" "${docker_conf_dir}/appdata/.env"
 printf '\n%b\n' " ${utick} Local IP set."
 
 printf '\n%b\n' " ${ulmc} Setting local Gateway in .env"
-sed -i "s|LAN_NETWORK=192.168.x.x/24|LAN_NETWORK=$gateway|g" "${docker_conf_dir}/appdata/.env"
+sed -i "s|LAN_NETWORK=192.168.x.0/24|LAN_NETWORK=$gateway|g" "${docker_conf_dir}/appdata/.env"
 printf '\n%b\n' " ${utick} local Gateway set."
 
 printf '\n%b\n' " ${ulmc} Setting timezone in .env"
@@ -634,29 +705,17 @@ while true; do
             printf '\n%b\n' " ${uplus} Installing Pullio for auto updates"
             if wget -qO /usr/local/bin/pullio "https://raw.githubusercontent.com/hotio/pullio/master/pullio.sh"; then
                 chmod +x /usr/local/bin/pullio
-                printf '\n%b\n' " ${utick} Pullio installed"
+                mkdir -p "${docker_conf_dir}/appdata/pullio"
+                printf '\n%b\n' " ${utick} Pullio installed, read final message when script is done."
             else
-                printf '\n%b\n' " ${ucross} There was a problem downloading then /usr/local/bin/pullio, try again"
-                exit 1
+                printf '\n%b\n' " ${ucross} There was a problem downloading pullio, please install manually. Read https://trash-guides.info/Hardlinks/How-to-setup-for/Synology/#pullio-auto-update-docker-compose-the-correct-way"
             fi
-
-            printf '\n%b\n' " ${ulmc} Creating task for auto updates"
-            if grep -q '/usr/local/bin/pullio' /etc/crontab; then
-                sed -e '/\/usr\/local\/bin\/pullio/d' -e '/^$/d' -i.bak-"$(date +%H-%M-%b)" /etc/crontab
-            else
-                cp -f /etc/crontab /etc/crontab.bak-"$(date +%H-%M-%b)"
-            fi
-
-            printf '%b\n' '0    3    *    *    7    root    /usr/local/bin/pullio &>> '"${docker_conf_dir}"'/appdata/pullio/pullio.log' >> /etc/crontab
-            sed 's/    /\t/g' -i /etc/crontab
-            systemctl -q restart crond
-            systemctl -q restart synoscheduler
-            printf '\n%b\n' " ${utick} Task Created"
 
             printf '\n%b\n\n' " ${uplus} Installing the selected containers"
             cd "${docker_conf_dir}/appdata/" || return
             docker-compose up -d --remove-orphans
             printf '\n%b\n\n' " ${utick} All set, everything should be running. If you have errors, follow the complete guide. And join our discord server."
+            printf '\n%b\n\n' " ${utick} If you want to enable automatic updates, you need to create a Scheduled Task.\nRead instructions here: https://trash-guides.info/Hardlinks/How-to-setup-for/Synology/#pullio-auto-update-docker-compose-the-correct-way"
             break
             ;;
         [Nn]*)
