@@ -581,36 +581,35 @@ install_tun() {
 #################################################################################################################################################
 #check if docker-compose already exist before overwriting.
 file="${docker_conf_dir}/appdata/docker-compose.yml"
-if [ ! -f "$file" ]; then
-    read -erp $' \e[32m\U2714\e[0m '"docker-compose.yml already exists, overwrite? "$'\e[38;5;10m'"[y]es"$'\e[m'" or "$'\e[38;5;9m'"[n]o"$'\e[m'" : " -i "y" yesno
+if [ -f "$file" ]; then
+    read -erp $'\e[32m\U2714\e[0m docker-compose.yml already exists, overwrite? \e[38;5;10m[y]es\e[m or \e[38;5;9m[n]o\e[m: ' -i "n" yesno
     case "${yesno}" in
         [Yy]*)
-printf '\n%b\n' '" ${ulmc} "Overwriting file..."'
-printf '\n%b\n' " ${ulmc} bootstrapping docker-compose.yml"
-mkdir -p "${docker_conf_dir}/appdata"
-cat > "${docker_conf_dir}/appdata/docker-compose.yml" << EOF
+            printf '\n%b\n' " ${ulmc} Overwriting file..."
+            printf '\n%b\n' " ${ulmc} Bootstrapping docker-compose.yml"
+            mkdir -p "${docker_conf_dir}/appdata"
+            cat > "${docker_conf_dir}/appdata/docker-compose.yml" <<EOF
 version: "3.2"
 services:
 EOF
             ;;
         [Nn]*)
-            printf '\n%b\n' " ${ulmc} Not overwriting docker-compose.yml"
-            # Add your code here for handling when not overwriting the file
+            printf '\n%b\n' " ${ulmc} Not overwriting docker-compose.yml, exiting."
             exit 0
             ;;
         *)
-            echo "Invalid response. Exiting."
+            printf "Invalid response. Exiting.\n"
             exit 1
             ;;
     esac
 else
-printf '\n%b\n' " ${ulmc} bootstrapping docker-compose.yml"
-mkdir -p "${docker_conf_dir}/appdata"
-cat > "${docker_conf_dir}/appdata/docker-compose.yml" << EOF
+    printf '\n%b\n' " ${ulmc} Bootstrapping docker-compose.yml"
+    mkdir -p "${docker_conf_dir}/appdata"
+    cat > "${docker_conf_dir}/appdata/docker-compose.yml" <<EOF
 version: "3.2"
 services:
 EOF
-printf '\n%b\n' " ${utick} docker-compose.yml bootstrapped"
+    printf '\n%b\n' " ${utick} docker-compose.yml bootstrapped"
 fi
 
 printf '\n%b\n' " ${ulmc} Downloading docker .env"
