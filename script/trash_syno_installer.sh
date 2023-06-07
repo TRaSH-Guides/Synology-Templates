@@ -386,9 +386,9 @@ fi
 #################################################################################################################################################
 # Default values
 #################################################################################################################################################
-user="docker"                                                                                  # {Update me if needed} User App will run as and the owner of it's binaries
+#user="docker"                                                                                  # {Update me if needed} User App will run as and the owner of it's binaries
 group="users"                                                                                  # {Update me if needed} Group App will run as.
-password=$(openssl rand -base64 14)                                                            # generate a password
+#password=$(openssl rand -base64 14)                                                            # generate a password
 docker_conf_dir="${docker_install_volume}/docker"                                              # docker directory
 docker_data_dir="${docker_data_volume:-${docker_install_volume}}/data"                         # /data share
 docker_data_dir_id="${docker_data_dir_id:-${docker_install_volume_id}}"                        # /volume{id} - just the number
@@ -500,9 +500,11 @@ fi
 #################################################################################################################################################
 printf '\n%b\n' " ${ulbc} Checking if user ${clm}docker${cend} exists"
 if ! synouser --get "${user}" &> /dev/null; then
-    printf '\n%b\n' " ${ucross} The user ${clm}docker${cend} doesn't exist, creating."
+    printf '\n%b\n' " ${ucross} The user ${clm}docker${cend} doesn't exist, creating a user for security purposes."
+    read -p "Enter a username: " user
+    read -p "Enter a password for $user: " password
     synouser --add "${user}" "${password}" "Docker User" 0 "" 0
-    printf '\n%b\n' " ${utick} User ${clm}docker${cend} created!"
+    printf '\n%b\n' " ${utick} User ${clm}$user${cend} created!"
 else
     printf '\n%b\n' " ${utick} User ${clm}docker${cend} exists!"
 fi
