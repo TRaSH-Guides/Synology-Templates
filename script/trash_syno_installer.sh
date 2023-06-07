@@ -705,29 +705,17 @@ while true; do
             printf '\n%b\n' " ${uplus} Installing Pullio for auto updates"
             if wget -qO /usr/local/bin/pullio "https://raw.githubusercontent.com/hotio/pullio/master/pullio.sh"; then
                 chmod +x /usr/local/bin/pullio
-                printf '\n%b\n' " ${utick} Pullio installed"
+                mkdir -p "${docker_conf_dir}/appdata/pullio"
+                printf '\n%b\n' " ${utick} Pullio installed, read final message when script is done."
             else
-                printf '\n%b\n' " ${ucross} There was a problem downloading then /usr/local/bin/pullio, try again"
-                exit 1
+                printf '\n%b\n' " ${ucross} There was a problem downloading pullio, please install manually. Read https://trash-guides.info/Hardlinks/How-to-setup-for/Synology/#pullio-auto-update-docker-compose-the-correct-way"
             fi
-
-            printf '\n%b\n' " ${ulmc} Creating task for auto updates"
-            if grep -q '/usr/local/bin/pullio' /etc/crontab; then
-                sed -e '/\/usr\/local\/bin\/pullio/d' -e '/^$/d' -i.bak-"$(date +%H-%M-%b)" /etc/crontab
-            else
-                cp -f /etc/crontab /etc/crontab.bak-"$(date +%H-%M-%b)"
-            fi
-
-            printf '%b\n' '0    3    *    *    7    root    /usr/local/bin/pullio &>> '"${docker_conf_dir}"'/appdata/pullio/pullio.log' >> /etc/crontab
-            sed 's/    /\t/g' -i /etc/crontab
-            systemctl -q restart crond
-            systemctl -q restart synoscheduler.target
-            printf '\n%b\n' " ${utick} Task Created"
 
             printf '\n%b\n\n' " ${uplus} Installing the selected containers"
             cd "${docker_conf_dir}/appdata/" || return
             docker-compose up -d --remove-orphans
             printf '\n%b\n\n' " ${utick} All set, everything should be running. If you have errors, follow the complete guide. And join our discord server."
+            printf '\n%b\n\n' " ${utick} If you want to enable automatic updates, you need to create a Scheduled Task.\nRead instructions here: https://trash-guides.info/Hardlinks/How-to-setup-for/Synology/#pullio-auto-update-docker-compose-the-correct-way"
             break
             ;;
         [Nn]*)
