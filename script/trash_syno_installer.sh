@@ -89,6 +89,13 @@ cmversion="7.2"
      printf "\n%b\n" " ${ulrc} Script is only compatible with DSM 7.0 and higher."
 	 exit 1
  fi
+
+ # Check if the version is higher or equal to 7.2
+if [ "$(printf '%s\n' "$cmversion" "$currentver" | sort -V | head -n1)" = "$cmversion" ]; then
+    cmdocker="yes"
+else
+    cmdocker="no"
+fi
 #################################################################################################################################################
 # check for root access and exit if the user does not have the required privileges.
 #################################################################################################################################################
@@ -295,7 +302,7 @@ mapfile -t volume_list_array < <(mount -l | grep -E "/volume[0-9]{1,2}\s" | awk 
 [[ "${#volume_list_array[@]}" -eq '1' ]] && docker_install_volume="${volume_list_array[0]}" docker_install_volume_id="${volume_list_array[0]#\/volume}"
 
 # If docker is installed we will get the default path from docker and use that to set the variable - docker_install_volume - else set docker to be isntalled
-if [[ "$(printf '%s\n' "$cmversion" "$currentver" | sort -V | head -n1)" == "$cmversion" ]]; then
+if [[ "$cmdocker" == "yes" ]]; then
     # DSM version is > 7.2, check if package is installed
     if [[ "$(
         synopkg status ContainerManager &> /dev/null
@@ -323,7 +330,7 @@ else
 fi
 
 # if docker needs to be installed but there is more than one volume ask the user which volume they want to use for the installation and set this to the variable - docker_install_volume
-if [[ "$(printf '%s\n' "$cmversion" "$currentver" | sort -V | head -n1)" == "$cmversion" ]]; then
+if [[ "$cmdocker" == "yes" ]]; then
     if [[ "${install_containermanager}" == 'yes' && "${#volume_list_array[@]}" -gt '1' ]]; then
         PS3=$'\n \e[94m\U25cf\e[m '"Please select where to install docker from the list of volumes: "$'\n\n '
         printf "\n%b\n\n" " ${uyc} This is where docker will be installed and the conf dirs stored"
@@ -404,7 +411,7 @@ containermanager_ver=$(curl -sL "https://archive.synology.com/download/Package/C
 # Install Docker
 #################################################################################################################################################
 # Install docker if install_docker=yes or skip
-if [[ "$(printf '%s\n' "$cmversion" "$currentver" | sort -V | head -n1)" == "$cmversion" ]]; then
+if [[ "$cmdocker" == "yes" ]]; then
     if [[ "${install_containermanager}" == 'yes' ]]; then
         printf "\n%b\n\n" " ${uplus} Installing Container Manager package"
         # We need to change this to the selected path to make it install where the user chose for it to go. Then revert it back to default after.
@@ -464,7 +471,7 @@ else
     fi
 fi
 
-if [[ "$(printf '%s\n' "$cmversion" "$currentver" | sort -V | head -n1)" == "$cmversion" ]]; then
+if [[ "$cmdocker" == "yes" ]]; then
     synopkg start ContainerManager &> /dev/null
 else
     synopkg start Docker &> /dev/null
@@ -472,7 +479,7 @@ fi
 #################################################################################################################################################
 # Test Docker
 #################################################################################################################################################
-if [[ "$(printf '%s\n' "$cmversion" "$currentver" | sort -V | head -n1)" == "$cmversion" ]]; then
+if [[ "$cmdocker" == "yes" ]]; then
     if [[ "$(
         synopkg status ContainerManager &> /dev/null
         printf '%s' "$?"
@@ -582,26 +589,26 @@ install_tun() {
 #check if docker-compose already exist before overwriting.
 file="${docker_conf_dir}/appdata/docker-compose.yml"
 if [ -f "$file" ]; then
-    read -erp $'\e[32m\U2714\e[0m docker-compose.yml already exists, overwrite? \e[38;5;10m[y]es\e[m or \e[38;5;9m[n]o\e[m: ' -i "n" yesno
-    case "${yesno}" in
-        [Yy]*)
-            printf '\n%b\n' " ${ulmc} Overwriting file..."
-            printf '\n%b\n' " ${ulmc} Bootstrapping docker-compose.yml"
-            mkdir -p "${docker_conf_dir}/appdata"
-            cat > "${docker_conf_dir}/appdata/docker-compose.yml" <<EOF
+    while true; do
+        read -erp $'\e[32m\U2714\e[0m docker-compose.yml already exists, overwrite and create new? \e[38;5;10m[y]es\e[m or \e[38;5;9m[n]o\e[m: ' -i "n" yesno
+        case "${yesno}" in
+            [Yy])
+                printf '\n%b\n' " ${ulmc} Overwriting file..."
+                printf '\n%b\n' " ${ulmc} Bootstrapping docker-compose.yml"
+                mkdir -p "${docker_conf_dir}/appdata"
+                cat > "${docker_conf_dir}/appdata/docker-compose.yml" <<EOF
 version: "3.2"
 services:
 EOF
-            ;;
-        [Nn]*)
-            printf '\n%b\n' " ${ulmc} Not overwriting docker-compose.yml, exiting."
-            exit 0
-            ;;
-        *)
-            printf "Invalid response. Exiting.\n"
-            exit 1
-            ;;
-    esac
+                break
+                ;;
+            [Nn])
+                printf '\n%b\n' " ${ulmc} Keeping current docker-compose.yml"
+                break
+                ;;
+            *) printf '\n%b\n\n' " ${ulrc} Please answer ${clg}[y]es${cend} or ${clr}[n]o${cend}" ;;
+        esac
+    done
 else
     printf '\n%b\n' " ${ulmc} Bootstrapping docker-compose.yml"
     mkdir -p "${docker_conf_dir}/appdata"
@@ -648,17 +655,22 @@ printf '\n%b\n' " ${utick} ${clc}${docker_data_dir}${cend} set."
 #################################################################################################################################################
 get_app_compose() {
     if wget -qO "${docker_conf_dir}/appdata/${1}.yml" "https://raw.githubusercontent.com/TRaSH-/Guides-Synology-Templates/main/templates/${1,,}.yml"; then
-        printf '\n' >> "${docker_conf_dir}/appdata/docker-compose.yml"
+        #printf '\n' >> "${docker_conf_dir}/appdata/docker-compose.yml"
 
         [[ "${options}" = 'sabnzbd' ]] && sed -r 's|- 8080:8080$|- 7080:8080|g' -i "${docker_conf_dir}/appdata/${1}.yml"
         [[ "${options}" == 'dozzle' ]] && sed -r 's|- 8080:8080$|- 7081:8080|g' -i "${docker_conf_dir}/appdata/${1}.yml"
-        #[[ "${options}" == 'qbittorrent' ]] && sed -r -e 's|devices:|devices: #qbit|g' -i "${docker_conf_dir}/appdata/${1}.yml" && sed -r 's|- /dev/net/tun:/dev/net/tun|- /dev/net/tun:/dev/net/tun #qbit|g' -i "${docker_conf_dir}/appdata/${1}.yml"
 
-        sed -n 'p' "${docker_conf_dir}/appdata/${1}.yml" >> "${docker_conf_dir}/appdata/docker-compose.yml"
-        rm -f "${docker_conf_dir}/appdata/${1}.yml"
-        printf '\n%b\n' " ${utick} ${1,,} template added to compose."
+        if grep -q "^\s*${1,,}:" "${docker_conf_dir}/appdata/docker-compose.yml"; then
+            printf '\n%b\n' " ${ucross} Skipped adding ${1,,} to compose, already exists."
+            rm -f "${docker_conf_dir}/appdata/${1}.yml"
+        else
+            printf '\n' >> "${docker_conf_dir}/appdata/docker-compose.yml"
+            sed -n 'p' "${docker_conf_dir}/appdata/${1}.yml" >> "${docker_conf_dir}/appdata/docker-compose.yml"
+            rm -f "${docker_conf_dir}/appdata/${1}.yml"
+            printf '\n%b\n' " ${utick} ${1,,} template added to compose."
+        fi
     else
-        printf '\n%b\n' " ${ucross} There was a problem downloading the template for ${1,,}, try again"
+        printf '\n%b\n' " ${ucross} There was a problem downloading the template for ${1,,}. Please try again."
         exit 1
     fi
 }
@@ -681,12 +693,11 @@ while true; do
             for options in "${selected_options[@]}"; do
                 mkdir -p "${docker_conf_dir}/appdata/${options}"
                 get_app_compose "${options}"
-                [[ "${options}" == 'plex' ]] && plex_installed="yes"
-                [[ "${options}" == 'qbittorrent' ]] && qbit_installed="yes"
+                [[ "${options}" == 'plex' ]] && plex_installed="yes" 
+                [[ "${options}" == 'qbittorrent' ]] && qbit_installed="yes" && mkdir -p "${docker_data_dir}"/torrents/{tv,movies}
                 [[ "${options}" == 'radarr' ]] && mkdir -p "${docker_data_dir}/media/movies"
                 [[ "${options}" == 'sonarr' ]] && mkdir -p "${docker_data_dir}/media/tv"
                 [[ "${options}" =~ ^(sabnzbd|nzbget)$ ]] && mkdir -p "${docker_data_dir}"/usenet/complete/{tv,movies}
-                [[ "${options}" == 'qbittorrent' ]] && mkdir -p "${docker_data_dir}"/torrents/{tv,movies}
             done
 
             if [[ "${plex_installed}" == "yes" ]]; then
@@ -710,38 +721,45 @@ while true; do
                             printf '\n%b\n\n' " ${utick} With VPN"
                             mkdir -p "${docker_conf_dir}/appdata/qbittorrent/wireguard"
                             install_tun
+                            while true; do
                             read -erp $' \e[93m\U25cf\e[0m '"Place your "$'\e[38;5;81m'"wg0.conf"$'\e[m'" in:"$'\n\n \e[38;5;81m'"${docker_conf_dir}/appdata/qbittorrent/wireguard"$'\e[m\n\n \e[93m\U25cf\e[0m '"When that is done please confirm "$'\e[38;5;10m'"[y]es"$'\e[m'" : " -i "" yes
-                            case "${yes}" in
-                                [Yy]*)
-                                    sed -r 's|VPN_ENABLED=false|VPN_ENABLED=true|g' -i "${docker_conf_dir}/appdata/.env"
-                                    sed -r 's|#   devices:|    devices:|g' -i "${docker_conf_dir}/appdata/docker-compose.yml"
-                                    sed -r 's|#     - /dev/net/tun:/dev/net/tun|      - /dev/net/tun:/dev/net/tun|g' -i "${docker_conf_dir}/appdata/docker-compose.yml"
-                                    if [[ -f "${docker_conf_dir}/appdata/qbittorrent/wireguard/wg0.conf" ]]; then
-                                        if sed -r 's|AllowedIPs = (.*)|AllowedIPs = 0.0.0.0/1,128.0.0.0/1|g' -i "${docker_conf_dir}/appdata/qbittorrent/wireguard/wg0.conf" 2> /dev/null; then
-                                            printf '\n%b\n' " ${utick} wg0.conf found and fixed."
-                                        fi
-
-                                        if curl -sL https://raw.githubusercontent.com/TRaSH-/Guides-Synology-Templates/main/script/PreUp.sh -o "${docker_conf_dir}/appdata/qbittorrent/wireguard/PreUp.sh"; then
-                                            printf '\n%b\n' " ${utick} PreUp.sh downloaded to ${docker_conf_dir}/appdata/qbittorrent/wireguard/PreUp.sh"
-                                        fi
-
-                                        if ! grep -q 'PreUp = bash /config/wireguard/PreUp.sh' "${docker_conf_dir}/appdata/qbittorrent/wireguard/wg0.conf"; then
-                                            if sed '/^\[Interface\]/!b;:a;n;/./ba;iPreUp = bash /config/wireguard/PreUp.sh' -i "${docker_conf_dir}/appdata/qbittorrent/wireguard/wg0.conf" 2> /dev/null; then
-                                                printf '\n%b\n' " ${utick} PreUp = bash /config/wireguard/PreUp.sh added to wg0.conf"
+                                case "${yes}" in
+                                    [Yy]*)
+                                        sed -r 's|VPN_ENABLED=false|VPN_ENABLED=true|g' -i "${docker_conf_dir}/appdata/.env"
+                                        sed -r 's|#   devices:|    devices:|g' -i "${docker_conf_dir}/appdata/docker-compose.yml"
+                                        sed -r 's|#     - /dev/net/tun:/dev/net/tun|      - /dev/net/tun:/dev/net/tun|g' -i "${docker_conf_dir}/appdata/docker-compose.yml"
+                                        if [[ -f "${docker_conf_dir}/appdata/qbittorrent/wireguard/wg0.conf" ]]; then
+                                            if sed -r 's|AllowedIPs = (.*)|AllowedIPs = 0.0.0.0/1,128.0.0.0/1|g' -i "${docker_conf_dir}/appdata/qbittorrent/wireguard/wg0.conf" 2> /dev/null; then
+                                                printf '\n%b\n' " ${utick} wg0.conf found and fixed."
                                             fi
+
+                                            if curl -sL https://raw.githubusercontent.com/TRaSH-/Guides-Synology-Templates/main/script/PreUp.sh -o "${docker_conf_dir}/appdata/qbittorrent/wireguard/PreUp.sh"; then
+                                                printf '\n%b\n' " ${utick} PreUp.sh downloaded to ${docker_conf_dir}/appdata/qbittorrent/wireguard/PreUp.sh"
+                                            fi
+
+                                            if ! grep -q 'PreUp = bash /config/wireguard/PreUp.sh' "${docker_conf_dir}/appdata/qbittorrent/wireguard/wg0.conf"; then
+                                                if sed '/^\[Interface\]/!b;:a;n;/./ba;iPreUp = bash /config/wireguard/PreUp.sh' -i "${docker_conf_dir}/appdata/qbittorrent/wireguard/wg0.conf" 2> /dev/null; then
+                                                    printf '\n%b\n' " ${utick} PreUp = bash /config/wireguard/PreUp.sh added to wg0.conf"
+                                                fi
+                                            fi
+                                        else
+                                            printf '\n%b\n\n ' " ${ucross} wg0.conf not found. Place file with filename ${clc}wg0.conf${cend} and answer yes when ready."
                                         fi
-                                    else
-                                        printf '\n%b\n\n ' " ${ucross} wg0.conf not found. Place file with filename ${clc}wg0.conf${cend} and restart script."
+                                        break
+                                        ;;
+                                    [Nn]*)
+                                        printf '\n%b\n\n ' " ${ucross} Cancelled."
                                         exit 1
-                                    fi
-                                    break
-                                    ;;
-                            esac
+                                        ;;
+                                    *) printf '\n%b\n\n' " ${ulrc} Please answer ${clg}[y]es${cend} to continue or ${clr}[n]o${cend} to cancel." ;;
+                                esac
+                            done
                             ;;
                         [Nn]*)
                             printf '\n%b\n' " ${ucross} Without VPN."
-                            #sed -r 's|devices: #qbit|#devices: #qbit|g' -i "${docker_conf_dir}/appdata/docker-compose.yml"
-                            sed -r 's|- /dev/net/tun:/dev/net/tun #qbit|#- /dev/net/tun:/dev/net/tun #qbit|g' -i "${docker_conf_dir}/appdata/docker-compose.yml"
+                            sed -r 's|VPN_ENABLED=true|VPN_ENABLED=false|g' -i "${docker_conf_dir}/appdata/.env"
+                            sed -r 's|   devices:|#    devices:|g' -i "${docker_conf_dir}/appdata/docker-compose.yml"
+                            sed -r 's|     - /dev/net/tun:/dev/net/tun|#      - /dev/net/tun:/dev/net/tun|g' -i "${docker_conf_dir}/appdata/docker-compose.yml"
                             break
                             ;;
                     esac
@@ -753,19 +771,23 @@ while true; do
             printf '\n%b\n' " ${utick} Permissions set."
 
             printf '\n%b\n' " ${uplus} Installing Pullio for auto updates"
-            if wget -qO /usr/local/bin/pullio "https://raw.githubusercontent.com/hotio/pullio/master/pullio.sh"; then
-                chmod +x /usr/local/bin/pullio
-                mkdir -p "${docker_conf_dir}/appdata/pullio"
-                printf '\n%b\n' " ${utick} Pullio installed, read final message when script is done."
+            if [[ -x "/usr/local/bin/pullio" ]]; then
+                printf '\n%b\n' " ${ucross} Pullio is already installed."
             else
-                printf '\n%b\n' " ${ucross} There was a problem downloading pullio, please install manually. Read https://trash-guides.info/Hardlinks/How-to-setup-for/Synology/#pullio-auto-update-docker-compose-the-correct-way"
+                if wget -qO /usr/local/bin/pullio "https://raw.githubusercontent.com/hotio/pullio/master/pullio.sh"; then
+                    chmod +x /usr/local/bin/pullio
+                    mkdir -p "${docker_conf_dir}/appdata/pullio"
+                    printf '\n%b\n' " ${utick} Pullio installed, read final message when the script is done."
+                else
+                    printf '\n%b\n' " ${ucross} There was a problem downloading Pullio. Please install manually. Read https://trash-guides.info/Hardlinks/How-to-setup-for/Synology/#pullio-auto-update-docker-compose-the-correct-way"
+                fi
             fi
 
             printf '\n%b\n\n' " ${uplus} Installing the selected containers"
             cd "${docker_conf_dir}/appdata/" || return
             docker-compose up -d --remove-orphans
             printf '\n%b\n\n' " ${utick} All set, everything should be running. If you have errors, follow the complete guide. And join our discord server."
-            printf '\n%b\n\n' " ${utick} If you want to enable automatic updates, you need to create a Scheduled Task.\nRead instructions here: https://trash-guides.info/Hardlinks/How-to-setup-for/Synology/#pullio-auto-update-docker-compose-the-correct-way"
+            printf '\n%b\n\n' " ${utick} If you want to enable automatic updates, you need to create a Scheduled Task.\n   Read instructions here: https://trash-guides.info/Hardlinks/How-to-setup-for/Synology/#pullio-auto-update-docker-compose-the-correct-way"
             break
             ;;
         [Nn]*)
