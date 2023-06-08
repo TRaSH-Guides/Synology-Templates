@@ -77,6 +77,31 @@ printf '\n%b\n' '\e[38;2;64;81;181m ⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠿⠿⠿⠿�
  ⣿⣿⣿⣿⣿⣶⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣤⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣾⣿⣿⣿⣿⣿⣿⣶⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣶⣿⣿⣿⣿⣿⣷⣶⣶⣾⣿⣿⣿
  ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿\e[0m'
 sleep 2
+
+#################################################################################################################################################
+# Disclaimer
+#################################################################################################################################################
+
+# Display disclaimer
+printf '\n%s\n' "DISCLAIMER: Use this script at your own risk."
+printf '\n%s\n' "This script is provided as-is without any warranty or guarantee of any kind. The author behind the script shall not be held liable for any damages or losses arising from its use."
+printf '\n%s\n' "Please note that the script may perform certain actions that can modify your system or data. It is recommended to review the script and understand its functionality before executing it."
+printf '\n%s\n' "By proceeding with the execution of this script, you acknowledge that you have read this disclaimer and agree to take full responsibility for any consequences that may arise from using the script."
+printf '\n%s\n' "If you are unsure about the script or its implications, it is recommended to seek assistance from a qualified professional before proceeding."
+printf '\n%s\n' "Or you can follow the complete step-by-step guide at:" 
+printf '%s\n' "https://trash-guides.info/Hardlinks/How-to-setup-for/Synology"
+printf '\n'
+
+# Prompt for confirmation
+read -erp "Do you want to continue? [y]es/[n]o: " -n 1 confirm
+echo
+
+# Check user's confirmation
+if [[ "${confirm}" != [Yy] ]]; then
+    printf '%s\n' "Script execution canceled by the user."
+    exit 0
+fi
+
 #################################################################################################################################################
 # check DSM Version
 #################################################################################################################################################
