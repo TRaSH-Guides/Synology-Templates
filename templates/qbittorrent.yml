@@ -7,7 +7,8 @@
 # To enable VPN set "VPN_ENABLED=true" in the .env, and uncomment the 'devices' section below. If you don't want VPN enabled set "VPN_ENABLED=false"
 # Start the container, and in your /appdata/qbittorrent a wireguard folder will be created where you need to place your wg0.conf file you got from your VPN provider !!!
 # Edit the wg0.conf, change AllowedIPs to 0.0.0.0/1,128.0.0.0/1
-# Remove any preexisting preup or postup from your wg0.conf file.
+# Remove the `DNS = 1.1.1.1` line from the wg0.conf
+# Remove any preexisting preup or postup from your wg0.conf file
 # Add this preup to your wg0 (read the instructions): https://github.com/TRaSH-/Guides-Synology-Templates/blob/main/script/PreUp.sh
 #
 # If you are getting a "Failed to open '/dev/net/tun'" error, run the commands below.
@@ -19,7 +20,7 @@
 
   qbittorrent:
     container_name: qbittorrent
-    image: cr.hotio.dev/hotio/qbittorrent:legacy-dc58bb9
+    image: cr.hotio.dev/hotio/qbittorrent:legacy
     restart: unless-stopped
     logging:
       driver: json-file
