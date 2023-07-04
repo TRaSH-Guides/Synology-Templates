@@ -418,9 +418,7 @@ fi
 #################################################################################################################################################
 # Default values
 #################################################################################################################################################
-#user="docker"                                                                                  # {Update me if needed} User App will run as and the owner of it's binaries
 group="users"                                                                                  # {Update me if needed} Group App will run as.
-#password=$(openssl rand -base64 14)                                                            # generate a password
 docker_conf_dir="${docker_install_volume}/docker"                                              # docker directory
 docker_data_dir="${docker_data_volume:-${docker_install_volume}}/data"                         # /data share
 docker_data_dir_id="${docker_data_dir_id:-${docker_install_volume_id}}"                        # /volume{id} - just the number
@@ -533,6 +531,7 @@ fi
 printf '\n%b\n' " ${ulbc} Checking if user ${clm}docker${cend} exists"
 if synouser --get "docker" &> /dev/null; then
     printf '\n%b\n' " ${utick} User ${clm}docker${cend} exists!"
+    user="docker"
 else
     printf '\n%b\n' " ${ucross} The user ${clm}docker${cend} doesn't exist, creating a user for security purposes."
     read -p "Enter a username: " user
@@ -770,7 +769,7 @@ while true; do
                                         else
                                             printf '\n%b\n\n ' " ${ucross} wg0.conf not found. Place file with filename ${clc}wg0.conf${cend} and answer yes when ready."
                                         fi
-                                        break
+                                        break 2
                                         ;;
                                     [Nn]*)
                                         printf '\n%b\n\n ' " ${ucross} Cancelled."
