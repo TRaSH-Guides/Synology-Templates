@@ -104,11 +104,10 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
       - UMASK=002
-      - ARGS=
-      - PLEX_CLAIM=${PLEX_CLAIM}
-      - ADVERTISE_IP=${PLEX_ADVERTISE_IP}
-      - ALLOWED_NETWORKS=
-      - PLEX_PASS=${PLEX_PASS}
+      - PLEX_CLAIM_TOKEN=${PLEX_CLAIM_TOKEN}
+      - PLEX_ADVERTISE_URL=${PLEX_ADVERTISE_URL}
+      - PLEX_NO_AUTH_NETWORKS=
+      - PLEX_BETA_INSTALL=${PLEX_BETA_INSTALL}
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERCONFDIR}/plex:/config:rw
