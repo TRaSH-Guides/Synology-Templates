@@ -4,7 +4,7 @@ services:
 # mkdir /volume1/docker/appdata/radarr
   radarr:
     container_name: radarr
-    image: cr.hotio.dev/hotio/radarr:latest
+    image: ghcr.io/hotio/radarr:latest
     restart: unless-stopped
     logging:
       driver: json-file
@@ -31,7 +31,7 @@ services:
 # mkdir /volume1/docker/appdata/sonarr
   sonarr:
     container_name: sonarr
-    image: cr.hotio.dev/hotio/sonarr:v4
+    image: ghcr.io/hotio/sonarr:v4
     restart: unless-stopped
     logging:
       driver: json-file
@@ -58,7 +58,7 @@ services:
 # mkdir /volume1/docker/appdata/bazarr
   bazarr:
     container_name: bazarr
-    image: cr.hotio.dev/hotio/bazarr:nightly
+    image: ghcr.io/hotio/bazarr:nightly
     restart: unless-stopped
     logging:
       driver: json-file
@@ -86,7 +86,7 @@ services:
 # Also please read the extra info => https://trash-guides.info/Hardlinks/How-to-setup-for/Synology/#appdata
   plex:
     container_name: plex
-    image: cr.hotio.dev/hotio/plex
+    image: ghcr.io/hotio/plex
     restart: unless-stopped
     logging:
       driver: json-file
