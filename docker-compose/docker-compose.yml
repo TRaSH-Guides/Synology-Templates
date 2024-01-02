@@ -31,7 +31,7 @@ services:
 # mkdir /volume1/docker/appdata/sonarr
   sonarr:
     container_name: sonarr
-    image: ghcr.io/hotio/sonarr:v4
+    image: ghcr.io/hotio/sonarr:release
     restart: unless-stopped
     logging:
       driver: json-file
