@@ -20,7 +20,7 @@
 
   qbittorrent:
     container_name: qbittorrent
-    image: cr.hotio.dev/hotio/qbittorrent:legacy
+    image: hotio/qbittorrent:legacy
     restart: unless-stopped
     logging:
       driver: json-file
