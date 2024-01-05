@@ -5,7 +5,7 @@
 #
   sabnzbd:
     container_name: sabnzbd
-    image: cr.hotio.dev/hotio/sabnzbd:latest
+    image: hotio/sabnzbd:latest
     restart: unless-stopped
     logging:
       driver: json-file

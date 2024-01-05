@@ -5,7 +5,7 @@
 #
   lidarr:
     container_name: lidarr
-    image: cr.hotio.dev/hotio/lidarr:latest
+    image: hotio/lidarr:latest
     restart: unless-stopped
     logging:
       driver: json-file
