@@ -5,7 +5,7 @@
 #
   unpackerr:
     container_name: unpackerr
-    image: cr.hotio.dev/hotio/unpackerr:release
+    image: hotio/unpackerr:release
     restart: unless-stopped
     logging:
       driver: json-file
