@@ -5,7 +5,7 @@
 #
   prowlarr:
     container_name: prowlarr
-    image: cr.hotio.dev/hotio/prowlarr:testing
+    image: hotio/prowlarr:testing
     restart: unless-stopped
     logging:
       driver: json-file
