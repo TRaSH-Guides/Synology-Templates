@@ -21,7 +21,6 @@
     environment:
       - DOZZLE_BASE=/
       - DOZZLE_LEVEL=info
-      - DOZZLE_TAILSIZE=300
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
