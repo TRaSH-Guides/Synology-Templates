@@ -9,7 +9,6 @@
 # Edit the wg0.conf, change AllowedIPs to 0.0.0.0/1,128.0.0.0/1
 # Remove the `DNS = 1.1.1.1` line from the wg0.conf
 # Remove any preexisting preup or postup from your wg0.conf file
-# Add this preup to your wg0 (read the instructions): https://github.com/TRaSH-/Guides-Synology-Templates/blob/main/script/PreUp.sh
 #
 # If you are getting a "Failed to open '/dev/net/tun'" error, run the commands below.
 # 1 - sudo curl -sL https://raw.githubusercontent.com/TRaSH-/Guides-Synology-Templates/main/script/tun.service -o "/etc/systemd/system/tun.service"
