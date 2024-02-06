@@ -5,7 +5,7 @@
 #
   readarr:
     container_name: readarr
-    image: cr.hotio.dev/hotio/readarr
+    image: hotio/readarr
     restart: unless-stopped
     logging:
       driver: json-file

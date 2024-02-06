@@ -5,7 +5,7 @@
 #
   tautulli:
     container_name: tautulli
-    image: cr.hotio.dev/hotio/tautulli
+    image: hotio/tautulli
     restart: unless-stopped
     logging:
       driver: json-file
