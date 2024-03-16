@@ -46,8 +46,11 @@
       - TZ=${TZ}
       - UMASK=022
       - VPN_ENABLED=${VPN_ENABLED}
+      - VPN_FIREWALL_TYPE=legacy
+      - VPN_PROVIDER=${VPN_PROVIDER}
       - VPN_LAN_NETWORK=${LAN_NETWORK}
-      - VPN_CONF=wg0
+      - VPN_CONF=wg0-fix
+      - VPN_AUTO_PORT_FORWARD=${PORT_FORWARD}
       - PRIVOXY_ENABLED=${QBITTORRENT_ENABLE_PRIVOXY}
       - WEBUI_PORTS=${QBITTORRENT_WEBUI_PORT}/tcp,${QBITTORRENT_WEBUI_PORT}/udp  # Optional only needed if you want to change the default 8080 WebUI port
     dns:
