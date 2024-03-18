@@ -33,7 +33,7 @@ jobs:
           done
           jq -n --arg v "${template_file_list[*]}" '{"templates": $v | split(" ")}' > template-file-list.json
 
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: Automated Change template-file-list.json
           file_pattern: templates/template-file-list.json
