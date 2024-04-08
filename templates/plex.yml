@@ -3,6 +3,7 @@
 # Don't forget to create the directory, change chown command if needed (the user:group part)
 # sudo -u docker mkdir -m=00775 /volume1/docker/appdata/plex
 #
+
   plex:
     container_name: plex
     image: hotio/plex
@@ -24,8 +25,8 @@
       - TZ=${TZ}
       - UMASK=002
       - ARGS=
-      - PLEX_CLAIM=${PLEX_CLAIM_TOKEN}
-      - ADVERTISE_IP=${PLEX_ADVERTISE_URL}
+      - PLEX_CLAIM_TOKEN=${PLEX_CLAIM_TOKEN}
+      - PLEX_ADVERTISE_URL=${PLEX_ADVERTISE_URL}
       - PLEX_NO_AUTH_NETWORKS=""
       - PLEX_BETA_INSTALL=${PLEX_BETA_INSTALL}
     volumes:
