@@ -6,7 +6,7 @@
 
   sonarr:
     container_name: sonarr
-    image: hotio/sonarr:nightly
+    image: ghcr.io/hotio/sonarr:latest
     restart: unless-stopped
     logging:
       driver: json-file
