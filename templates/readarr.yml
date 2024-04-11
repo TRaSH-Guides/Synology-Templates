@@ -5,7 +5,7 @@
 #
   readarr:
     container_name: readarr
-    image: hotio/readarr
+    image: ghcr.io/hotio/readarr
     restart: unless-stopped
     logging:
       driver: json-file
@@ -22,6 +22,7 @@
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
+      - UMASK=002
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERCONFDIR}/readarr:/config
