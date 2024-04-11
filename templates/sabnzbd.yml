@@ -5,7 +5,7 @@
 #
   sabnzbd:
     container_name: sabnzbd
-    image: hotio/sabnzbd:latest
+    image: ghcr.io/hotio/sabnzbd
     restart: unless-stopped
     logging:
       driver: json-file
@@ -18,11 +18,12 @@
       - org.hotio.pullio.discord.webhook=${PULLIO_DISCORD_WEBHOOK}
     ports:
       - 8080:8080
-      - 9090:9090
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
+      - UMASK=002
+      - WEBUI_PORTS=8080/tcp,8080/udp
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERCONFDIR}/sabnzbd:/config
