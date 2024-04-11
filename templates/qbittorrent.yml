@@ -5,10 +5,10 @@
 #
 # If you want to use VPN follow the instructions below.
 # To enable VPN set "VPN_ENABLED=true" in the .env, and uncomment the 'devices' section below. If you don't want VPN enabled set "VPN_ENABLED=false"
-# Start the container, and in your /appdata/qbittorrent a wireguard folder will be created where you need to place your wg0.conf file you got from your VPN provider !!!
-# Edit the wg0.conf, change AllowedIPs to 0.0.0.0/1,128.0.0.0/1
+# Start the container, and in your /appdata/qbittorrent a wireguard folder will be created where you need to place your wg0.conf file you got from your VPN provider and rename it to wg0-fix.conf
 # Remove the `DNS = 1.1.1.1` line from the wg0.conf
 # Remove any preexisting preup or postup from your wg0.conf file
+# Restart qbittorrent after you made the changes to wg0 config file.
 #
 # If you are getting a "Failed to open '/dev/net/tun'" error, run the commands below.
 # 1 - sudo curl -sL https://raw.githubusercontent.com/TRaSH-/Guides-Synology-Templates/main/script/tun.service -o "/etc/systemd/system/tun.service"
@@ -19,7 +19,7 @@
 
   qbittorrent:
     container_name: qbittorrent
-    image: hotio/qbittorrent:legacy
+    image: hotio/qbittorrent:latest
     restart: unless-stopped
     logging:
       driver: json-file
