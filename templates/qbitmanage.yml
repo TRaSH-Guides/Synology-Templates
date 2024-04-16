@@ -5,8 +5,8 @@
 #
   qbit_manage:
     container_name: qbitmanage
-    image: bobokun/qbit_manage
-    restart: unless-stopped
+    image: ghcr.io/stuffanthings/qbit_manage:latest
+    restart: on-failure:2
     logging:
       driver: json-file
       options:
