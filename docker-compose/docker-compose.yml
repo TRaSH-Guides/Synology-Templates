@@ -54,6 +54,32 @@ services:
       - ${DOCKERCONFDIR}/sonarr:/config
       - ${DOCKERSTORAGEDIR}:/data
 
+# Prowlarr - https://hotio.dev/containers/prowlarr/
+# sudo -u docker mkdir -m=00775 /volume1/docker/appdata/prowlarr
+  prowlarr:
+    container_name: prowlarr
+    image: ghcr.io/hotio/prowlarr:testing
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-file: ${DOCKERLOGGING_MAXFILE}
+        max-size: ${DOCKERLOGGING_MAXSIZE}
+    labels:
+      - org.hotio.pullio.update=${PULLIO_UPDATE}
+      - org.hotio.pullio.notify=${PULLIO_NOTIFY}
+      - org.hotio.pullio.discord.webhook=${PULLIO_DISCORD_WEBHOOK}
+    ports:
+      - 9696:9696
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=002
+      - ARGS=
+    volumes:
+      - ${DOCKERCONFDIR}/prowlarr:/config:rw
+
 # Bazarr - https://hotio.dev/containers/bazarr/
 # mkdir /volume1/docker/appdata/bazarr
   bazarr:
