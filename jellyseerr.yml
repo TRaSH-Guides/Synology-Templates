@@ -1,0 +1,20 @@
+# Jellyseerr - https://hotio.dev/containers/jellyseerr/
+#
+# Don't forget to create the directory, change chown command if needed (the user:group part)
+# sudo -u docker mkdir -m=00775 /volume1/docker/appdata/jellyseerr
+# 
+  jellyseerr:
+    container_name: jellyseerr
+    image: ghcr.io/hotio/jellyseerr
+    ports:
+      - 5055:5055
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK=002
+      - TZ=${TZ}
+    labels:
+      - org.hotio.pullio.update=${PULLIO_UPDATE}
+      - org.hotio.pullio.notify=${PULLIO_NOTIFY}
+    volumes:
+      - ${DOCKERCONFDIR}/jellyseerr:/config
