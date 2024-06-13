@@ -1,0 +1,28 @@
+# Jellyseerr - https://hotio.dev/containers/jellyseerr/
+#
+# Don't forget to create the directory, change chown command if needed (the user:group part)
+# sudo -u docker mkdir -m=00775 /volume1/docker/appdata/jellyseerr
+#
+  jellyseerr:
+    container_name: jellyseerr
+    image: hotio/jellyseerr
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-file: ${DOCKERLOGGING_MAXFILE}
+        max-size: ${DOCKERLOGGING_MAXSIZE}
+    labels:
+      - org.hotio.pullio.update=${PULLIO_UPDATE}
+      - org.hotio.pullio.notify=${PULLIO_NOTIFY}
+      - org.hotio.pullio.discord.webhook=${PULLIO_DISCORD_WEBHOOK}
+    ports:
+      - 5055:5055
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERCONFDIR}/jellyseerr:/config
+      - ${DOCKERSTORAGEDIR}/media:/data/media
