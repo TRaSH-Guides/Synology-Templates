@@ -81,6 +81,35 @@ services:
       - ${DOCKERCONFDIR}/bazarr:/config
       - ${DOCKERSTORAGEDIR}/media:/data/media
 
+# Prowlarr - https://hotio.dev/containers/prowlarr/
+#
+# Don't forget to create the directory, change chown command if needed (the user:group part)
+# sudo -u docker mkdir -m=00775 /volume1/docker/appdata/prowlarr
+#
+  prowlarr:
+    container_name: prowlarr
+    image: hotio/prowlarr:testing
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-file: ${DOCKERLOGGING_MAXFILE}
+        max-size: ${DOCKERLOGGING_MAXSIZE}
+    labels:
+      - org.hotio.pullio.update=${PULLIO_UPDATE}
+      - org.hotio.pullio.notify=${PULLIO_NOTIFY}
+      - org.hotio.pullio.discord.webhook=${PULLIO_DISCORD_WEBHOOK}
+    ports:
+      - 9696:9696
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=002
+      - ARGS=
+    volumes:
+      - ${DOCKERCONFDIR}/prowlarr:/config:rw
+
 # Plex - https://hotio.dev/containers/plex/
 # mkdir -p /volume1/docker/appdata/plex
 # Also please read the extra info => https://trash-guides.info/Hardlinks/How-to-setup-for/Synology/#appdata
