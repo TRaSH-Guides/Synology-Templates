@@ -2,7 +2,7 @@
 #
 # Don't forget to create the directory, change chown command if needed (the user:group part)
 # sudo -u docker mkdir -m=00775 /volume1/docker/appdata/jellyseerr
-# 
+#
   
   jellyseerr:
     container_name: jellyseerr
