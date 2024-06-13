@@ -717,14 +717,15 @@ while true; do
             for options in "${selected_options[@]}"; do
                 mkdir -p "${docker_conf_dir}/appdata/${options}"
                 get_app_compose "${options}"
-                [[ "${options}" == 'plex' ]] && plex_installed="yes" 
+                [[ "${options}" == 'plex' ]] && plex_installed="yes"
+		[[ "${options}" == 'jellyfin' ]] && jellyfin_installed="yes" 
                 [[ "${options}" == 'qbittorrent' ]] && qbit_installed="yes" && mkdir -p "${docker_data_dir}"/torrents/{tv,movies}
                 [[ "${options}" == 'radarr' ]] && mkdir -p "${docker_data_dir}/media/movies"
                 [[ "${options}" == 'sonarr' ]] && mkdir -p "${docker_data_dir}/media/tv"
                 [[ "${options}" =~ ^(sabnzbd|nzbget)$ ]] && mkdir -p "${docker_data_dir}"/usenet/complete/{tv,movies}
             done
 
-            if [[ "${plex_installed}" == "yes" ]]; then
+            if [[ "${plex_installed}" == "yes" || "${jellyfin_installed}" == "yes" ]]; then
                 #check for quick sync
                 if [[ -d "$qsv" ]]; then
                     ### Do nothing if $qsv exists.
