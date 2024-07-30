@@ -1,5 +1,7 @@
 # qBittorrent - https://hub.docker.com/r/hotio/qbittorrent
 #
+# Refer to Hotio's documentation for additional details on container / vpn enviormental variables at https://hotio.dev/containers/qbittorrent.
+#
 # Don't forget to create the directory, change chown command if needed (the user:group part)
 # sudo -u docker mkdir -m=00775 /volume1/docker/appdata/qbittorrent
 #
