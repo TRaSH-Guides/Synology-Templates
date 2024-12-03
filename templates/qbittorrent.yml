@@ -1,12 +1,10 @@
-# qBittorrent - https://hub.docker.com/r/hotio/qbittorrent
-#
 # Refer to Hotio's documentation for additional details on container / vpn enviormental variables at https://hotio.dev/containers/qbittorrent.
 #
 # Don't forget to create the directory, change chown command if needed (the user:group part)
 # sudo -u docker mkdir -m=00775 /volume1/docker/appdata/qbittorrent
 #
 # If you want to use VPN follow the instructions below.
-# To enable VPN set "VPN_ENABLED=true" in the .env, and uncomment the 'devices' section below. If you don't want VPN enabled set "VPN_ENABLED=false"
+# To enable VPN set "VPN_ENABLED=true" in the .env file, and uncomment the 'devices' section below. If you don't want VPN enabled set "VPN_ENABLED=false"
 # Start the container, and in your /appdata/qbittorrent a wireguard folder will be created where you need to place your wg0.conf file you got from your VPN provider and rename it to wg0-fix.conf
 # Remove the `DNS = 1.1.1.1` line from the wg0.conf
 # Remove any preexisting preup or postup from your wg0.conf file
@@ -18,6 +16,8 @@
 # 3 - sudo systemctl start tun
 # Check if running with - sudo systemctl status tun
 # recreate the container with - sudo docker-compose up --force-recreate qbittorrent
+#
+# The webui password will be printed in the docker log of this container, run "sudo docker logs qbittorrent" to find it or use Dozzle container to read logs.
 
   qbittorrent:
     container_name: qbittorrent
