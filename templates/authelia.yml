@@ -1,4 +1,4 @@
-# Authelia - https://www.authelia.com/docs/
+# Authelia - https://www.authelia.com
 #
 # Don't forget to create the directory, change the -u value if needed (the created user)
 # sudo -u docker mkdir -m=00775 /volume1/docker/appdata/authelia
