@@ -88,7 +88,7 @@ services:
 #
   prowlarr:
     container_name: prowlarr
-    image: hotio/prowlarr:testing
+    image: ghcr.io/hotio/prowlarr:testing
     restart: unless-stopped
     logging:
       driver: json-file

@@ -5,7 +5,7 @@
 #
   radarr:
     container_name: radarr
-    image: hotio/radarr:latest
+    image: ghcr.io/hotio/radarr:latest
     restart: unless-stopped
     logging:
       driver: json-file

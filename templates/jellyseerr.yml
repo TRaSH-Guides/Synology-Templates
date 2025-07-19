@@ -5,7 +5,7 @@
 #
   jellyseerr:
     container_name: jellyseerr
-    image: hotio/jellyseerr
+    image: ghcr.io/hotio/jellyseerr
     restart: unless-stopped
     logging:
       driver: json-file
