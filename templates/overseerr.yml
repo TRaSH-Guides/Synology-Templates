@@ -5,7 +5,7 @@
 #
   overseerr:
     container_name: overseerr
-    image: hotio/overseerr
+    image: ghcr.io/hotio/overseerr
     restart: unless-stopped
     logging:
       driver: json-file

@@ -5,7 +5,7 @@
 #
   jellyfin:
     container_name: jellyfin
-    image: hotio/jellyfin
+    image: ghcr.io/hotio/jellyfin
     restart: unless-stopped
     logging:
       driver: json-file

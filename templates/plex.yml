@@ -6,7 +6,7 @@
 
   plex:
     container_name: plex
-    image: hotio/plex
+    image: ghcr.io/hotio/plex
     restart: unless-stopped
     logging:
       driver: json-file

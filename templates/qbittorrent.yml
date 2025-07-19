@@ -21,7 +21,7 @@
 
   qbittorrent:
     container_name: qbittorrent
-    image: hotio/qbittorrent:latest
+    image: ghcr.io/hotio/qbittorrent:latest
     restart: unless-stopped
     logging:
       driver: json-file
