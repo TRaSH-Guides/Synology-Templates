@@ -2,7 +2,14 @@ blank_issues_enabled: false
 contact_links:
   - name: Guides
     url: https://trash-guides.info/
-    about: Guides mainly for Sonarr/Radarr/Bazarr and everything related to it.
+    about: TRaSH-Guides offers detailed documentation that answers common questions and provides the best settings for your entire media server setup
   - name: Discord Support
-    url: https://discord.gg/Vau8dZ3
-    about: Ask questions and any other related help
+    url: https://trash-guides.info/discord
+    about: If you have any questions about the guide or need assistance, please join our Discord server.
+  - name: Would you happen to have any suggestions for the guide?
+    url: https://discord.com/channels/492590071455940612/1021029470389403818
+    about: Join the suggestions section of our Discord server.
+  - name: Bug/Error Found in the Guide?
+    url: https://trash-guides.info/discord
+    about: Bugs and errors are only opened on GitHub by one of the team once we have confirmed them on our Discord server. Please visit our Discord server's Support forum and create a post there. Issues raised directly on GutHub will automatically be closed.
+

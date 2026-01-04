@@ -1,6 +1,6 @@
 ---
 name: Bug/Error Found in a Template?
-about: Support Requests will be closed, if you are unsure check out my Discord first.
+description: Issues are only opened on GitHub by one of the team members after we have confirmed them on our Discord server. Issues raised directly on GitHub will be automatically closed.
 title: "[Bug]"
 labels: BUG
 assignees: TRaSH-
