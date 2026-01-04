@@ -42,5 +42,5 @@
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERCONFDIR}/qbitmanage:/config
-      - ${DOCKERCONFDIR}/qbittorrent/data/BT_backup:/qbit_appdata # modify if needed
-      - ${DOCKERSTORAGEDIR}/torrents:/data/torrents               # modify if needed
+      - ${DOCKERCONFDIR}/qbittorrent/data/BT_backup:/qbit_appdata  # modify if needed
+      - ${DOCKERSTORAGEDIR}/torrents:/data/torrents                # modify if needed
