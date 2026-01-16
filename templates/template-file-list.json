@@ -7,7 +7,6 @@
     "dozzle",
     "emby",
     "jellyfin",
-    "jellyseerr",
     "lidarr",
     "notifiarr",
     "overseerr",
@@ -19,6 +18,7 @@
     "readarr",
     "recyclarr",
     "sabnzbd",
+    "seerr",
     "sonarr",
     "tautulli",
     "unpackerr"
