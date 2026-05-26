@@ -1,0 +1,18 @@
+default: true
+
+# MD002 / MD041: first heading / first line heading-level checks.
+# Disabled because templates and partial docs may not start with H1.
+MD002: false
+MD041: false
+
+# MD013: line length. Disabled because URLs and tables would force breaks.
+MD013: false
+
+# MD033: inline HTML. Allowed for callouts and badges.
+MD033: false
+
+# MD034: bare URLs. Common in TRaSH docs (intentional copy-paste).
+MD034: false
+
+# MD046: code block style. Allow either fenced or indented.
+MD046: false
