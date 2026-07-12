@@ -2,7 +2,7 @@
 
 👍🎉 First off, thanks for taking the time to contribute! 🎉👍
 
-Here you will find a set of guidelines for contributing to Guides-Synology-Templates which is part of TRaSH Guides, Which you can find [HERE](https://trash-guides.info/),
+Here you will find a set of guidelines for contributing to Guides-Synology-Templates which is part of [TRaSH Guides](https://trash-guides.info/),
 These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
 
 ## Guidelines

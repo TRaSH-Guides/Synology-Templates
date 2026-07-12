@@ -1,3 +1,4 @@
+# Regenerates templates/template-file-list.json whenever templates/** changes on main.
 name: create template-list.json
 
 on:
@@ -13,6 +14,11 @@ on:
       - main
     paths:
       - "templates/**"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   create-json:
     if: github.event.pull_request.merged == 'true' || github.event_name == 'push'

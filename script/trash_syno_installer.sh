@@ -59,6 +59,7 @@ cend="\e[0m" # [c]olor[end]
 #################################################################################################################################################
 # Banner
 #################################################################################################################################################
+# editorconfig-checker-disable
 printf '\n%b\n' '\e[38;2;64;81;181m ⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠿⠿⠿⠿⠿⠿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
  ⣿⣿⠿⠛⠋⠉⢀⣀⣀⣀⣠⣤⣤⣤⣤⣤⣀⣀⣀⠈⠉⠛⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
  ⣿⠁⣠⣴⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣤⡀⢹⣿⣿⠛⠛⠛⠛⠛⠛⠛⠛⠛⣿⠛⠛⠛⠛⠛⠛⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠛⠛⠛⠛⠻⢿⣿⣿⠛⠛⠛⣿⣿⣿⠛⠛⠛⣿⣿⣿⣿
@@ -76,6 +77,7 @@ printf '\n%b\n' '\e[38;2;64;81;181m ⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠿⠿⠿⠿�
  ⣿⣿⣿⣷⡀⠀⠈⠉⠛⠛⠛⠛⠛⠛⠛⠛⠛⠉⠉⠀⠀⣰⣿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⢀⣤⣿⣧⡀⠀⠀⠀⡀⠀⠀⣿⣿⠀⠀⢸⣿⣧⡀⠀⠀⠀⡀⠀⠀⣿⣷⣀⠀⠈⠉⠁⠀⣀⣾⣧⡀⠀⠈⠉⠁⠀⣰⣿
  ⣿⣿⣿⣿⣿⣶⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣤⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣾⣿⣿⣿⣿⣿⣿⣶⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣶⣿⣿⣿⣿⣿⣷⣶⣶⣾⣿⣿⣿
  ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿\e[0m'
+# editorconfig-checker-enable
 sleep 2
 
 #################################################################################################################################################
@@ -88,7 +90,7 @@ printf '\n%s\n' "This script is provided as-is without any warranty or guarantee
 printf '\n%s\n' "Please note that the script may perform certain actions that can modify your system or data. It is recommended to review the script and understand its functionality before executing it."
 printf '\n%s\n' "By proceeding with the execution of this script, you acknowledge that you have read this disclaimer and agree to take full responsibility for any consequences that may arise from using the script."
 printf '\n%s\n' "If you are unsure about the script or its implications, it is recommended to seek assistance from a qualified professional before proceeding."
-printf '\n%s\n' "Or you can follow the complete step-by-step guide at:" 
+printf '\n%s\n' "Or you can follow the complete step-by-step guide at:"
 printf '%s\n' "https://trash-guides.info/Hardlinks/How-to-setup-for/Synology"
 printf '\n'
 
@@ -110,12 +112,12 @@ fi
 currentver="$(. /etc/VERSION && echo "${productversion:?}")"
 requiredver="7.0.0"
 cmversion="7.2"
- if [ "$(printf '%s\n' "$requiredver" "$currentver" | sort -V | head -n1)" != "$requiredver" ]; then 
-     printf "\n%b\n" " ${ulrc} Script is only compatible with DSM 7.0 and higher."
-	 exit 1
- fi
+if [ "$(printf '%s\n' "$requiredver" "$currentver" | sort -V | head -n1)" != "$requiredver" ]; then
+    printf "\n%b\n" " ${ulrc} Script is only compatible with DSM 7.0 and higher."
+    exit 1
+fi
 
- # Check if the version is higher or equal to 7.2
+# Check if the version is higher or equal to 7.2
 if [ "$(printf '%s\n' "$cmversion" "$currentver" | sort -V | head -n1)" = "$cmversion" ]; then
     cmdocker="yes"
 else
@@ -594,8 +596,8 @@ printf '\n%b\n' " ${utick} User has rights to share."
 #################################################################################################################################################
 install_tun() {
     if curl -sL https://raw.githubusercontent.com/TRaSH-Guides/Synology-Templates/main/script/tun.service -o "/etc/systemd/system/tun.service"; then
-         printf '\n%b\n' " ${utick} Service file to start Tun downloaded."
-    fi 
+        printf '\n%b\n' " ${utick} Service file to start Tun downloaded."
+    fi
     if systemctl enable /etc/systemd/system/tun.service; then
         printf '\n%b\n' " ${utick} Service enabled."
     fi
@@ -720,7 +722,7 @@ while true; do
                 mkdir -p "${docker_conf_dir}/appdata/${options}"
                 get_app_compose "${options}"
                 [[ "${options}" == 'plex' ]] && plex_installed="yes"
-		[[ "${options}" == 'jellyfin' ]] && jellyfin_installed="yes" 
+                [[ "${options}" == 'jellyfin' ]] && jellyfin_installed="yes"
                 [[ "${options}" == 'qbittorrent' ]] && qbit_installed="yes" && mkdir -p "${docker_data_dir}"/torrents/{tv,movies}
                 [[ "${options}" == 'radarr' ]] && mkdir -p "${docker_data_dir}/media/movies"
                 [[ "${options}" == 'sonarr' ]] && mkdir -p "${docker_data_dir}/media/tv"
