@@ -1,0 +1,37 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices",
+    "customManagers:githubActionsVersions",
+    "schedule:weekly",
+    ":automergePr",
+    ":automergeDigest",
+    ":automergeLinters",
+    ":automergeStableNonMajor",
+    ":automergeTesters",
+    ":automergeTypes",
+    ":enableVulnerabilityAlerts",
+    ":renovatePrefix"
+  ],
+  "baseBranchPatterns": ["$default"],
+  "minimumReleaseAge": "3 days",
+  "rebaseWhen": "conflicted",
+  "ignorePaths": ["docker-compose/**"],
+  "packageRules": [
+    {
+      "description": "Group GitHub Actions non-major dependencies",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "groupName": "GitHub Actions",
+      "groupSlug": "github-actions"
+    },
+    {
+      "description": "Group GitHub Actions major dependencies",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["major"],
+      "groupName": "GitHub Actions major",
+      "groupSlug": "github-actions-major",
+      "automerge": false
+    }
+  ]
+}
