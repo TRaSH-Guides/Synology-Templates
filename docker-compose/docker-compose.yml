@@ -21,7 +21,7 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - UMASK=002
+      - UMASK=022
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERCONFDIR}/radarr:/config
@@ -48,7 +48,7 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - UMASK=002
+      - UMASK=022
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERCONFDIR}/sonarr:/config
@@ -75,7 +75,7 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - UMASK=002
+      - UMASK=022
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERCONFDIR}/bazarr:/config
@@ -105,7 +105,7 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - UMASK=002
+      - UMASK=022
       - ARGS=
     volumes:
       - ${DOCKERCONFDIR}/prowlarr:/config:rw
@@ -132,7 +132,7 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - UMASK=002
+      - UMASK=022
       - PLEX_CLAIM_TOKEN=${PLEX_CLAIM_TOKEN}
       - PLEX_ADVERTISE_URL=${PLEX_ADVERTISE_URL}
       - PLEX_NO_AUTH_NETWORKS=
