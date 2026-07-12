@@ -12,7 +12,7 @@ set -euo pipefail
 
 wg_conf="${CONFIG_DIR}/wireguard/wg0.conf"
 if [[ ! -f "${wg_conf}" ]]; then
-    echo "PreUp.sh: ${wg_conf} not found, skipping route setup" >&2
+    echo "PreUp.sh: ${wg_conf} not found, aborting (this exits non-zero, which wg-quick treats as fatal)" >&2
     exit 1
 fi
 
