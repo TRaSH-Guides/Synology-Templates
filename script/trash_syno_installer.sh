@@ -27,7 +27,7 @@
 # Author       - Ideas and original and code by @bokkoman.
 # Contributors - Big thanks to @userdocs for helping with the script.
 # Testers      - Thanks @Davo1624 for testing initial script. Xpenology for providing VM images.
-# Credits      - https://trash-guides.info https://github.com/TRaSH-/Guides-Synology-Templates
+# Credits      - https://trash-guides.info https://github.com/TRaSH-Guides/Synology-Templates
 
 ## This script is created for Synology systems that support Docker. Tested on DSM v7.1
 
@@ -157,7 +157,9 @@ function _multiselect {
 
     # Create our menu my_options associative array
     declare -A my_options
-    eval "$(curl -sL "https://raw.githubusercontent.com/TRaSH-/Guides-Synology-Templates/main/templates/template-file-list.json" | jq -r '.templates | to_entries[]|@sh"my_options[\(.value)]=false"')"
+    while IFS= read -r template_name; do
+        my_options["$template_name"]=false
+    done < <(curl -sL "https://raw.githubusercontent.com/TRaSH-Guides/Synology-Templates/main/templates/template-file-list.json" | jq -r '.templates[]')
 
     # Create some local arrays we need and make sure they're set to empty when the function is used/looped in the script
     local selected_values=()
@@ -591,7 +593,7 @@ printf '\n%b\n' " ${utick} User has rights to share."
 # VPN stuff
 #################################################################################################################################################
 install_tun() {
-    if curl -sL https://raw.githubusercontent.com/TRaSH-/Guides-Synology-Templates/main/script/tun.service -o "/etc/systemd/system/tun.service"; then
+    if curl -sL https://raw.githubusercontent.com/TRaSH-Guides/Synology-Templates/main/script/tun.service -o "/etc/systemd/system/tun.service"; then
          printf '\n%b\n' " ${utick} Service file to start Tun downloaded."
     fi 
     if systemctl enable /etc/systemd/system/tun.service; then
@@ -644,7 +646,7 @@ EOF
 fi
 
 printf '\n%b\n' " ${ulmc} Downloading docker .env"
-if wget -qO "${docker_conf_dir}/appdata/.env" https://raw.githubusercontent.com/TRaSH-/Guides-Synology-Templates/main/docker-compose/.env; then
+if wget -qO "${docker_conf_dir}/appdata/.env" https://raw.githubusercontent.com/TRaSH-Guides/Synology-Templates/main/docker-compose/.env; then
     printf '\n%b\n' " ${utick} Docker .env downloaded."
 else
     printf '\n%b\n' " ${ucross} There was a problem downloading then .env, try again"
@@ -678,7 +680,7 @@ printf '\n%b\n' " ${utick} ${clc}${docker_data_dir}${cend} set."
 # compose template downloader
 #################################################################################################################################################
 get_app_compose() {
-    if wget -qO "${docker_conf_dir}/appdata/${1}.yml" "https://raw.githubusercontent.com/TRaSH-/Guides-Synology-Templates/main/templates/${1,,}.yml"; then
+    if wget -qO "${docker_conf_dir}/appdata/${1}.yml" "https://raw.githubusercontent.com/TRaSH-Guides/Synology-Templates/main/templates/${1,,}.yml"; then
         #printf '\n' >> "${docker_conf_dir}/appdata/docker-compose.yml"
 
         [[ "${options}" = 'sabnzbd' ]] && sed -r 's|- 8080:8080$|- 7080:8080|g' -i "${docker_conf_dir}/appdata/${1}.yml"
