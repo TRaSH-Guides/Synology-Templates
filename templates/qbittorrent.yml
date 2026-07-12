@@ -21,6 +21,13 @@
 
   qbittorrent:
     container_name: qbittorrent
+    # DO NOT float this to :latest/:release. Synology's DSM kernel (4.4-series
+    # on many models) lacks nftables support, and newer hotio/qbittorrent
+    # builds dropped the legacy iptables fallback in their VPN/WireGuard
+    # firewall init, so :latest fails with "RTNETLINK answers: Not supported".
+    # This pin is deliberate — see
+    # https://kunat.dev/notes/synology-qbittorrent-wireguard-nftables/
+    # and prior maintainer commits 656c5b4 / 35c40f6.
     image: ghcr.io/hotio/qbittorrent:release-e799f87
     restart: unless-stopped
     logging:
