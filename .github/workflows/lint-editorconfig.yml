@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Install editorconfig-checker
-        uses: editorconfig-checker/action-editorconfig-checker@840e866d93b8e032123c23bac69dece044d4d84c # v2.2.0
+        uses: editorconfig-checker/action-editorconfig-checker@7b3ae4aa4c2245e1296bfeb7690729093697f5b3 # v2.3.0
 
       - name: Run editorconfig-checker
         run: editorconfig-checker
